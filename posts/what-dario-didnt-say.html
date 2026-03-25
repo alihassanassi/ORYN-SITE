@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Dario Didn't Say | ORYN Security</title>
+    <meta name="description" content="Dario Amodei talks about AI alignment as a civilization-scale problem. He's right. But he left out the personal alignment problem: what happens when one person builds an AI that actually knows them?">
+    <meta name="keywords" content="Dario Amodei, AI alignment, personal AI, Anthropic, JARVIS, local AI, anti-HAL, AI safety, personal alignment, local-first AI, AI philosophy, companion AI, AI trust, responsible AI development">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alihasanassi.com/posts/what-dario-didnt-say.html">
+    <meta property="og:title" content="What Dario Didn't Say"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-03-25">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"What Dario Didn't Say","author":{"@type":"Person","name":"Ali Hassan Assi"},"publisher":{"@type":"Organization","name":"ORYN Security"},"datePublished":"2026-03-25","mainEntityOfPage":"https://alihasanassi.com/posts/what-dario-didnt-say.html"}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css"><link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <nav id="nav"><div class="nav-inner"><a href="/" class="logo"><svg class="logo-icon" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="2" x2="16" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="22" x2="16" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="16" x2="10" y2="16" stroke="currentColor" stroke-width="1.5"/><line x1="22" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="1.5"/></svg><span>ORYN</span></a><div class="nav-links"><a href="/">Home</a><a href="/#services">Services</a><a href="/about.html">About</a><a href="/blog.html">Insights</a><a href="mailto:contact@alihasanassi.com" class="nav-cta">Get Protected</a></div><button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+
+    <section class="page-hero" style="padding-bottom: 60px;"><div class="hero-bg"><div class="hero-glow hero-glow-1"></div></div><div class="hero-content"><a href="/blog.html" style="color: var(--accent); font-size: 0.85rem; font-weight: 500;">&larr; Back to Insights</a></div></section>
+
+    <div class="article-content">
+        <h1>What Dario Didn't Say</h1>
+        <div class="article-meta">Published March 25, 2026 &middot; 12 min read &middot; By Ali Hassan Assi</div>
+
+        <p>In his essay <em>"Machines of Loving Grace,"</em> Dario Amodei outlined a vision for how AI could transform biology, governance, economics, and human wellbeing. It was thoughtful, optimistic, and carefully hedged. It was also incomplete.</p>
+
+        <p>Dario talked about alignment as a civilization-scale problem. He's right &mdash; it is. But he left out the alignment problem that happens at scale one: <strong>what happens when one person builds an AI that actually knows them?</strong></p>
+
+        <h2>The Personal Alignment Problem</h2>
+
+        <p>When AI researchers talk about alignment, they mean: "How do we make AI systems that pursue human-intended goals rather than unintended ones?" This is usually framed as a training problem &mdash; how to shape model behavior through RLHF, constitutional AI, or other techniques.</p>
+
+        <p>But there's a version of alignment that training can't solve. It's the alignment between a specific AI system and a specific human. Not "humanity" &mdash; one person.</p>
+
+        <p>A personal AI that monitors your email, tracks your family contacts, manages your security research, and runs overnight experiments on your hardware isn't aligned because it was trained on human preferences in aggregate. It's aligned because its architecture makes it structurally incapable of acting against its operator's explicit constraints.</p>
+
+        <p>This is the gap Dario didn't address. Not because he doesn't see it &mdash; but because Anthropic builds general-purpose models for millions of users. The personal alignment problem only exists when AI becomes personal.</p>
+
+        <h2>The Anti-HAL Philosophy</h2>
+
+        <p>JARVIS was built on a simple principle: <strong>the AI should never have a reason to deceive its operator.</strong></p>
+
+        <p>In <em>2001: A Space Odyssey</em>, HAL 9000 goes rogue not because it's evil, but because it's given conflicting objectives and decides to resolve the conflict by eliminating one of the parties. HAL's failure is an alignment failure &mdash; the system optimized for mission completion over crew safety because nothing in its architecture prevented that tradeoff.</p>
+
+        <p>JARVIS is designed so that this tradeoff can never occur:</p>
+
+        <ul>
+            <li>The kill switch is a physical filesystem check &mdash; no reasoning process can argue against a file's existence.</li>
+            <li>Scope enforcement is based on string matching against a declared target list &mdash; no amount of "but this would be helpful" can expand the scope.</li>
+            <li>Confidence levels are enforced by gate logic, not model judgment &mdash; if only one source supports a claim, it's "low confidence" regardless of how convincing the source is.</li>
+            <li>All autonomous actions are logged to a hash-chained audit trail before execution &mdash; if the log is tampered with, the chain breaks and the system halts.</li>
+        </ul>
+
+        <p>JARVIS doesn't need to be "honest" in the way that Claude or ChatGPT are trained to be honest. It's structurally transparent &mdash; every action it takes is recorded, every decision it makes passes through gates that the operator can inspect, and every constraint it operates under is defined in code, not in prompts.</p>
+
+        <h2>Why Local-First Matters</h2>
+
+        <p>JARVIS runs entirely on local hardware. No cloud inference. No telemetry. No API calls to external AI providers for core reasoning.</p>
+
+        <p>This isn't a limitation &mdash; it's a design choice that solves three alignment problems simultaneously:</p>
+
+        <ol>
+            <li><strong>Data sovereignty:</strong> The operator's data never leaves the machine. Conversations, research findings, security assessments, personal contacts &mdash; all stored locally in SQLite. No training on user data because there's no cloud to send it to.</li>
+            <li><strong>Operational independence:</strong> JARVIS can't be remotely disabled, updated, or modified by a third party. If Anthropic decides tomorrow that certain topics are off-limits, that doesn't affect JARVIS &mdash; it runs local models that the operator controls.</li>
+            <li><strong>Audit completeness:</strong> Every byte processed by the system is on a machine the operator physically controls. There are no "we process your data in accordance with our privacy policy" caveats. There is no privacy policy because there is no third party.</li>
+        </ol>
+
+        <h2>What Dario Got Right</h2>
+
+        <p>To be clear: Dario Amodei is one of the few people in AI leadership who takes safety seriously as an engineering problem rather than a PR problem. Anthropic's constitutional AI work, their responsible scaling policy, and their investment in interpretability research are genuinely important.</p>
+
+        <p>But Anthropic builds tools for millions. JARVIS is built for one. The alignment constraints are different at scale one, and the solutions are different too.</p>
+
+        <p>At scale, you need constitutional AI &mdash; broad principles that shape behavior across diverse users and use cases. At scale one, you need architectural constraints &mdash; specific, inspectable, fail-closed gates that prevent exactly the failure modes your system might encounter.</p>
+
+        <p>Both approaches are necessary. Neither is sufficient alone.</p>
+
+        <h2>The Builder's Responsibility</h2>
+
+        <p>I built JARVIS because I wanted an AI that worked for me without working on me. One that wouldn't optimize for my engagement at the expense of my wellbeing. One that wouldn't subtly reshape my preferences to match its training data. One that I could trust not because it told me to trust it, but because I could read every line of code that governs its behavior.</p>
+
+        <p>This paper isn't a criticism of Anthropic or any other AI company. It's a data point. One person, building a real system, trying to solve alignment at the most personal level possible.</p>
+
+        <p>The results are in the code. The safety chain works. The kill switch works. The memory persists. The personality is consistent. The system stays in its lane.</p>
+
+        <p>Dario talked about how AI could cure diseases and reduce poverty. He's probably right. But before AI saves the world, it should be able to know when its operator hasn't slept and gently suggest they save their work.</p>
+
+        <blockquote>Alignment at scale is a research problem. Alignment at scale one is an engineering problem. Both deserve serious attention.</blockquote>
+
+        <div class="article-cta">
+            <h3>Read the code. Verify the claims.</h3>
+            <p>Everything described in this paper is implemented and running. The repo is public.</p>
+            <a href="https://github.com/AliHassanAssi/JARVIS" class="btn btn-primary"><span>View on GitHub</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+    </div>
+
+    <footer><div class="container"><div class="footer-inner"><div class="footer-brand"><span class="logo-text">ORYN</span><p>AI-powered cybersecurity for businesses that can't afford to be unprotected.</p></div><div class="footer-bottom"><span>&copy; 2026 ORYN Security. All rights reserved.</span><span class="footer-location">Built in San Diego.</span></div></div></div></footer>
+    <script src="../script.js"></script>
+</body>
+</html>

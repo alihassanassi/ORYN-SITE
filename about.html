@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About ORYN Security — Built by Hackers, For the People They Protect</title>
     <meta name="description" content="ORYN Security was founded after a ransomware attack shut down a family business overnight. We're security researchers building AI-powered protection for small businesses that can't afford to be the next headline.">
-    <meta name="keywords" content="about ORYN security, cybersecurity company Connecticut, security researchers, ethical hacking company, managed security provider, AI cybersecurity startup, small business security team">
+    <meta name="keywords" content="about ORYN security, cybersecurity company San Diego, security researchers, ethical hacking company, managed security provider, AI cybersecurity startup, small business security team">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alihasanassi.com/about.html">
 
@@ -29,7 +29,7 @@
                 "jobTitle": "Founder & Lead Security Researcher"
             },
             "foundingDate": "2026",
-            "foundingLocation": "Connecticut, USA"
+            "foundingLocation": "San Diego, CA, USA"
         }
     }
     </script>
@@ -149,6 +149,49 @@
         <p>Security researcher, builder, and the person who sat across from a family that lost everything to a ransomware attack. Ali built ORYN from the ground up — from the AI engine that monitors networks in real-time to the 7-gate safety chain that ensures no automated action ever runs without human oversight. ORYN isn't a product built in a boardroom. It's a tool built by someone who watched the problem happen and refused to let it happen again.</p>
     </div>
 
+    <!-- UNDER THE HOOD -->
+    <section class="about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">UNDER THE HOOD</span>
+                <h2>What ORYN actually does on your network.</h2>
+                <p>This is the production sensor that runs 24/7 inside your perimeter. No marketing fluff — this is the real architecture.</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">01</div>
+                    <h4>Packet-Level Capture</h4>
+                    <p>Passive tap between your firewall and managed switch. Full protocol analysis across DNS, HTTP/S, SMB, RDP, and SSH. Circular buffer — no raw payloads stored, only metadata and evidence hashes.</p>
+                </div>
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">02</div>
+                    <h4>8 Detection Engines</h4>
+                    <p>Port scanning (T1046), brute force (T1110), DNS tunneling (T1071.004), C2 beacon detection (T1071), lateral movement (T1021), data exfiltration (T1048), ARP spoofing (T1557.002), rogue DHCP (T1557.003). All MITRE ATT&CK mapped.</p>
+                </div>
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">03</div>
+                    <h4>TLS Fingerprinting</h4>
+                    <p>JA3/JA3S extraction from every TLS handshake. Checked against 50+ known-malicious fingerprints: Cobalt Strike, Emotet, Trickbot, Metasploit, and more. Custom fingerprints addable per client.</p>
+                </div>
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">04</div>
+                    <h4>Data Loss Prevention</h4>
+                    <p>Outbound DLP scanning for Social Security numbers, credit card numbers (with Luhn validation), bulk email addresses, credentials in cleartext, and file signature extraction. No raw data stored — only hashes and match counts.</p>
+                </div>
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">05</div>
+                    <h4>Behavioral Baselines</h4>
+                    <p>Every IP gets a rolling 24-hour behavioral profile: byte/packet volumes, destination IPs, protocols, active hours. Z-score anomaly detection at 2.5 sigma catches zero-day behavior that signature-based tools miss entirely.</p>
+                </div>
+                <div class="tech-feature" data-glow>
+                    <div class="tech-num">06</div>
+                    <h4>Multi-Tenant MSSP</h4>
+                    <p>Client-isolated telemetry. Every event tagged with sensor ID. Cross-client correlation is architecturally impossible — your data is scoped at the database layer. WireGuard tunnels for remote management.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- VALUES -->
     <section class="about-section">
         <div class="container">
@@ -227,7 +270,7 @@
                 </div>
                 <div class="footer-bottom">
                     <span>&copy; 2026 ORYN Security. All rights reserved.</span>
-                    <span class="footer-location">Built in Connecticut.</span>
+                    <span class="footer-location">Built in San Diego.</span>
                 </div>
             </div>
         </div>

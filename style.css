@@ -490,7 +490,8 @@ img { max-width: 100%; display: block; }
 }
 .term-time { color: var(--text-muted); }
 .term-ok { color: var(--green); }
-.term-warn { color: var(--red); }
+.term-warn { color: var(--accent); }
+.term-crit { color: var(--red); font-weight: 700; }
 
 .term-cursor {
     display: inline-block; width: 7px; height: 14px;

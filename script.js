@@ -115,14 +115,14 @@
     var terminalBody = document.getElementById("terminalBody");
     if (terminalBody) {
         var TERM_LINES = [
-            { time: "18:04:12", type: "ok",   text: "Perimeter scan complete — 0 anomalies" },
-            { time: "18:04:15", type: "ok",   text: "SSL certificates valid — 47 days remaining" },
-            { time: "18:04:18", type: "warn", text: "Unusual login attempt from 185.x.x.x (RU)" },
-            { time: "18:04:18", type: "ok",   text: "Auto-blocked — added to threat list" },
-            { time: "18:04:19", type: "ok",   text: "Operator notified via SMS + email" },
-            { time: "18:04:22", type: "ok",   text: "Correlating with known APT signatures..." },
-            { time: "18:04:24", type: "ok",   text: "No APT match — isolated brute force attempt" },
-            { time: "18:04:30", type: "ok",   text: "Network baseline nominal" }
+            { time: "02:14:03", type: "ok",   text: "[BASELINE] 192.168.1.0/24 — 47 hosts profiled, 0 anomalies" },
+            { time: "02:14:07", type: "ok",   text: "[JA3] TLS handshake 10.0.1.22 → 142.251.x.x — fingerprint clean" },
+            { time: "02:14:11", type: "warn", text: "[T1110] Brute force — 14 SSH failures from 185.x.x.x in 60s" },
+            { time: "02:14:11", type: "ok",   text: "[CORRELATOR] Cross-referencing AbuseIPDB... score: 97/100" },
+            { time: "02:14:12", type: "warn", text: "[T1071] C2 beacon pattern — 10.0.1.45 → 91.x.x.x, jitter 2.3%" },
+            { time: "02:14:12", type: "crit", text: "[ESCALATED] 3+ event types from 10.0.1.45 — severity → CRITICAL" },
+            { time: "02:14:13", type: "ok",   text: "[DLP] Outbound scan clean — 0 PII matches, 0 credential leaks" },
+            { time: "02:14:15", type: "ok",   text: "[HEARTBEAT] All systems nominal — 8 detectors active" }
         ];
 
         var termStarted = false;
@@ -147,8 +147,8 @@
                 div.className = "term-line";
 
                 var timeSpan = '<span class="term-time">' + data.time + '</span> ';
-                var tagClass = data.type === "warn" ? "term-warn" : "term-ok";
-                var tag = data.type === "warn" ? "[ALERT]" : "[ORYN]";
+                var tagClass = data.type === "crit" ? "term-crit" : data.type === "warn" ? "term-warn" : "term-ok";
+                var tag = data.type === "crit" ? "[CRITICAL]" : data.type === "warn" ? "[ALERT]" : "[ORYN]";
                 var prefix = timeSpan + '<span class="' + tagClass + '">' + tag + '</span> ';
 
                 div.innerHTML = prefix;
