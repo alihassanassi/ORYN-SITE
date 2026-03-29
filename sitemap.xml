@@ -19,7 +19,25 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://alihasanassi.com/posts/oryn-sensor-architecture.html</loc>
+        <loc>https://alihasanassi.com/posts/kaelen-sensor-architecture.html</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://alihasanassi.com/posts/what-dario-didnt-say.html</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://alihasanassi.com/posts/constitution-before-product.html</loc>
+        <lastmod>2026-03-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://alihasanassi.com/posts/ambient-intelligence-problem.html</loc>
         <lastmod>2026-03-25</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>

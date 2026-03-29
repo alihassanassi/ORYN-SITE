@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   ORYN Security — script.js
+   KAELEN Security — script.js
    Premium interactions: particles, typing terminal, counters, glow
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -148,7 +148,7 @@
 
                 var timeSpan = '<span class="term-time">' + data.time + '</span> ';
                 var tagClass = data.type === "crit" ? "term-crit" : data.type === "warn" ? "term-warn" : "term-ok";
-                var tag = data.type === "crit" ? "[CRITICAL]" : data.type === "warn" ? "[ALERT]" : "[ORYN]";
+                var tag = data.type === "crit" ? "[CRITICAL]" : data.type === "warn" ? "[ALERT]" : "[KAELEN]";
                 var prefix = timeSpan + '<span class="' + tagClass + '">' + tag + '</span> ';
 
                 div.innerHTML = prefix;

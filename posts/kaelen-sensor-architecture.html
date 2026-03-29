@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inside the ORYN Sensor: Production Network Security Architecture | ORYN Security</title>
-    <meta name="description" content="A deep technical walkthrough of the ORYN passive network sensor: 8 threat detectors, JA3 fingerprinting, DLP scanning, behavioral baselines, multi-tenant isolation, and fail-closed safety — all running locally on your network.">
-    <meta name="keywords" content="ORYN sensor, network security sensor, passive network monitoring, JA3 fingerprinting, DLP scanning, threat detection, MITRE ATT&CK, behavioral baseline, anomaly detection, C2 beacon detection, network security architecture, MSSP architecture, multi-tenant security, fail-closed security, production security sensor">
+    <title>Inside the KAELEN Sensor: Production Network Security Architecture | KAELEN Security</title>
+    <meta name="description" content="A deep technical walkthrough of the KAELEN passive network sensor: 8 threat detectors, JA3 fingerprinting, DLP scanning, behavioral baselines, multi-tenant isolation, and fail-closed safety — all running locally on your network.">
+    <meta name="keywords" content="KAELEN sensor, network security sensor, passive network monitoring, JA3 fingerprinting, DLP scanning, threat detection, MITRE ATT&CK, behavioral baseline, anomaly detection, C2 beacon detection, network security architecture, MSSP architecture, multi-tenant security, fail-closed security, production security sensor">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://alihasanassi.com/posts/oryn-sensor-architecture.html">
-    <meta property="og:title" content="Inside the ORYN Sensor: Production Network Security Architecture"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-03-25">
+    <link rel="canonical" href="https://alihasanassi.com/posts/kaelen-sensor-architecture.html">
+    <meta property="og:title" content="Inside the KAELEN Sensor: Production Network Security Architecture"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-03-25">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Inside the ORYN Sensor: Production Network Security Architecture","author":{"@type":"Person","name":"Ali Hassan Assi"},"publisher":{"@type":"Organization","name":"ORYN Security"},"datePublished":"2026-03-25","mainEntityOfPage":"https://alihasanassi.com/posts/oryn-sensor-architecture.html"}
+    {"@context":"https://schema.org","@type":"Article","headline":"Inside the KAELEN Sensor: Production Network Security Architecture","author":{"@type":"Person","name":"Ali Hassan Assi"},"publisher":{"@type":"Organization","name":"KAELEN Security"},"datePublished":"2026-03-25","mainEntityOfPage":"https://alihasanassi.com/posts/kaelen-sensor-architecture.html"}
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -18,31 +18,31 @@
 </head>
 <body>
     <div class="scroll-progress" id="scrollProgress"></div>
-    <nav id="nav"><div class="nav-inner"><a href="/" class="logo"><svg class="logo-icon" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="2" x2="16" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="22" x2="16" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="16" x2="10" y2="16" stroke="currentColor" stroke-width="1.5"/><line x1="22" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="1.5"/></svg><span>ORYN</span></a><div class="nav-links"><a href="/">Home</a><a href="/#services">Services</a><a href="/about.html">About</a><a href="/blog.html">Insights</a><a href="mailto:contact@alihasanassi.com" class="nav-cta">Get Protected</a></div><button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+    <nav id="nav"><div class="nav-inner"><a href="/" class="logo"><svg class="logo-icon" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="16" r="6" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="2" x2="16" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="16" y1="22" x2="16" y2="30" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="16" x2="10" y2="16" stroke="currentColor" stroke-width="1.5"/><line x1="22" y1="16" x2="30" y2="16" stroke="currentColor" stroke-width="1.5"/></svg><span>KAELEN</span></a><div class="nav-links"><a href="/">Home</a><a href="/#services">Services</a><a href="/about.html">About</a><a href="/blog.html">Insights</a><a href="mailto:contact@alihasanassi.com" class="nav-cta">Get Protected</a></div><button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
 
     <section class="page-hero" style="padding-bottom: 60px;"><div class="hero-bg"><div class="hero-glow hero-glow-1"></div></div><div class="hero-content"><a href="/blog.html" style="color: var(--accent); font-size: 0.85rem; font-weight: 500;">&larr; Back to Insights</a></div></section>
 
     <div class="article-content">
-        <h1>Inside the ORYN Sensor</h1>
+        <h1>Inside the KAELEN Sensor</h1>
         <div class="article-meta">Published March 25, 2026 &middot; 15 min read &middot; By Ali Hassan Assi</div>
 
         <p>Most managed security providers sell you a dashboard connected to someone else's detection engine. They pipe your logs to a cloud SIEM, run some correlation rules written three years ago, and email you an alert PDF once a month.</p>
 
-        <p>ORYN is different. It's a physical sensor that sits inside your network perimeter &mdash; between your firewall and your managed switch &mdash; and watches every packet that crosses the wire. No cloud. No third-party data access. No "we'll get back to you in 24 hours."</p>
+        <p>KAELEN is different. It's a physical sensor that sits inside your network perimeter &mdash; between your firewall and your managed switch &mdash; and watches every packet that crosses the wire. No cloud. No third-party data access. No "we'll get back to you in 24 hours."</p>
 
         <p>This post documents the production architecture: what it detects, how it detects it, and why the safety model matters as much as the detection model.</p>
 
         <h2>The Physical Layer: Firewall Behind the Firewall</h2>
 
-        <p>ORYN deploys as a passive network tap. It connects to a mirror/SPAN port on your managed switch, receiving a copy of every packet that traverses your network. The sensor itself has no IP address on your production network. It cannot inject packets. It cannot modify traffic. It is architecturally incapable of disrupting your network.</p>
+        <p>KAELEN deploys as a passive network tap. It connects to a mirror/SPAN port on your managed switch, receiving a copy of every packet that traverses your network. The sensor itself has no IP address on your production network. It cannot inject packets. It cannot modify traffic. It is architecturally incapable of disrupting your network.</p>
 
-        <p>This is a deliberate constraint, not a limitation. A security sensor that can take down your network is a liability. A sensor that can only observe is a tool. ORYN is a tool.</p>
+        <p>This is a deliberate constraint, not a limitation. A security sensor that can take down your network is a liability. A sensor that can only observe is a tool. KAELEN is a tool.</p>
 
         <p>If the sensor hardware fails, traffic continues flowing through your switch unimpeded. We call this <strong>fail-closed safety with fail-open networking</strong> &mdash; the sensor shuts down safely, but your business never goes offline because of us.</p>
 
         <h2>Packet Capture and Protocol Analysis</h2>
 
-        <p>At the lowest layer, ORYN captures packets and parses them into structured protocol events. The capture engine maintains a 10,000-packet circular buffer &mdash; enough for forensic context, small enough to prevent memory exhaustion. No raw payloads are stored to disk. Ever. Only metadata and evidence hashes.</p>
+        <p>At the lowest layer, KAELEN captures packets and parses them into structured protocol events. The capture engine maintains a 10,000-packet circular buffer &mdash; enough for forensic context, small enough to prevent memory exhaustion. No raw payloads are stored to disk. Ever. Only metadata and evidence hashes.</p>
 
         <p>The protocol analyzer handles five core protocols:</p>
 
@@ -65,19 +65,19 @@
         <p>More than 10 authentication failures from a single source in 60 seconds. Covers SSH, RDP, SMB, and HTTP Basic Auth. Rate-based detection with sliding windows, not static thresholds.</p>
 
         <h3>3. DNS Tunneling Detection (T1071.004 &mdash; Application Layer Protocol: DNS)</h3>
-        <p>DNS tunneling encodes data in DNS queries to exfiltrate information or establish command-and-control channels. ORYN measures query entropy and payload size &mdash; legitimate DNS queries have low entropy and small payloads. Tunneling traffic has entropy above 3.5 bits/char and payloads exceeding 100 bytes.</p>
+        <p>DNS tunneling encodes data in DNS queries to exfiltrate information or establish command-and-control channels. KAELEN measures query entropy and payload size &mdash; legitimate DNS queries have low entropy and small payloads. Tunneling traffic has entropy above 3.5 bits/char and payloads exceeding 100 bytes.</p>
 
         <h3>4. C2 Beacon Detection (T1071 &mdash; Application Layer Protocol)</h3>
-        <p>Command-and-control beacons call home at regular intervals with low jitter. ORYN tracks connection timing to external IPs and flags patterns where timing jitter drops below 5%. A human browsing the web has random, high-jitter connection patterns. Malware beacons are metronomic.</p>
+        <p>Command-and-control beacons call home at regular intervals with low jitter. KAELEN tracks connection timing to external IPs and flags patterns where timing jitter drops below 5%. A human browsing the web has random, high-jitter connection patterns. Malware beacons are metronomic.</p>
 
         <h3>5. Lateral Movement Detection (T1021 &mdash; Remote Services)</h3>
         <p>Internal-to-internal connections on RDP (3389), SMB (445), or WMI (135) ports. In a flat network with no segmentation, every workstation can reach every server via these protocols. When one machine starts reaching out to others on these ports in rapid succession, something is spreading.</p>
 
         <h3>6. Data Exfiltration Detection (T1048 &mdash; Exfiltration Over Alternative Protocol)</h3>
-        <p>If a single internal host sends more than 10 megabytes per minute to a single external IP, that's not normal web browsing. That's a potential data exfiltration event. ORYN tracks byte volumes per source-destination pair with sliding windows.</p>
+        <p>If a single internal host sends more than 10 megabytes per minute to a single external IP, that's not normal web browsing. That's a potential data exfiltration event. KAELEN tracks byte volumes per source-destination pair with sliding windows.</p>
 
         <h3>7. ARP Spoofing Detection (T1557.002 &mdash; ARP Cache Poisoning)</h3>
-        <p>Gratuitous ARP packets and MAC/IP conflicts indicate someone (or something) is trying to intercept traffic via man-in-the-middle positioning. ORYN maintains a MAC-to-IP mapping table and alerts on conflicts.</p>
+        <p>Gratuitous ARP packets and MAC/IP conflicts indicate someone (or something) is trying to intercept traffic via man-in-the-middle positioning. KAELEN maintains a MAC-to-IP mapping table and alerts on conflicts.</p>
 
         <h3>8. Rogue DHCP Detection (T1557.003 &mdash; DHCP Spoofing)</h3>
         <p>Any DHCP server response from an IP not in the whitelisted DHCP server list generates an immediate alert. A rogue DHCP server can redirect all traffic through an attacker-controlled gateway.</p>
@@ -86,7 +86,7 @@
 
         <p>Every TLS connection starts with a handshake. The Client Hello message contains a unique combination of TLS version, cipher suites, extensions, elliptic curves, and point formats. The MD5 hash of this combination is the JA3 fingerprint. The Server Hello response produces a JA3S fingerprint.</p>
 
-        <p>Malware families have distinctive TLS fingerprints because their developers use specific TLS libraries and configurations. ORYN maintains a database of 50+ known-malicious fingerprints covering:</p>
+        <p>Malware families have distinctive TLS fingerprints because their developers use specific TLS libraries and configurations. KAELEN maintains a database of 50+ known-malicious fingerprints covering:</p>
 
         <ul>
             <li>Cobalt Strike, Sliver, Mythic, Havoc, BruteRatel &mdash; commercial and open-source C2 frameworks</li>
@@ -99,7 +99,7 @@
 
         <h2>Data Loss Prevention (DLP)</h2>
 
-        <p>ORYN scans outbound traffic for sensitive data patterns:</p>
+        <p>KAELEN scans outbound traffic for sensitive data patterns:</p>
 
         <ul>
             <li><strong>Social Security numbers</strong> &mdash; XXX-XX-XXXX pattern with format validation</li>
@@ -109,7 +109,7 @@
             <li><strong>File signatures</strong> &mdash; ZIP, PDF, Office document, and database file magic bytes in outbound traffic</li>
         </ul>
 
-        <p>DLP only scans outbound traffic to external IPs. Internal traffic is excluded. And critically: <strong>ORYN never stores the matched data.</strong> Only evidence hashes and match counts are recorded. We prove a leak happened without keeping a copy of the leaked data.</p>
+        <p>DLP only scans outbound traffic to external IPs. Internal traffic is excluded. And critically: <strong>KAELEN never stores the matched data.</strong> Only evidence hashes and match counts are recorded. We prove a leak happened without keeping a copy of the leaked data.</p>
 
         <h2>Behavioral Baseline Profiling</h2>
 
@@ -122,13 +122,13 @@
             <li>Active hours of day</li>
         </ul>
 
-        <p>Anomaly detection uses z-score analysis with a 2.5 sigma threshold. This means if an IP suddenly starts generating traffic that is 2.5 standard deviations above its normal behavior, ORYN flags it &mdash; even if the traffic doesn't match any known attack signature.</p>
+        <p>Anomaly detection uses z-score analysis with a 2.5 sigma threshold. This means if an IP suddenly starts generating traffic that is 2.5 standard deviations above its normal behavior, KAELEN flags it &mdash; even if the traffic doesn't match any known attack signature.</p>
 
         <p>This is how you catch zero-days. Signature-based detection only catches known attacks. Behavioral baselines catch <em>anything that deviates from normal</em> &mdash; including attacks that haven't been discovered yet.</p>
 
         <h2>Four Intelligence Feeds</h2>
 
-        <p>ORYN doesn't just watch your network &mdash; it watches the world and correlates:</p>
+        <p>KAELEN doesn't just watch your network &mdash; it watches the world and correlates:</p>
 
         <ul>
             <li><strong>NVD CVE Monitoring:</strong> Polls the National Vulnerability Database every 6 hours. Cross-references new CVEs against software observed on your network.</li>
@@ -139,7 +139,7 @@
 
         <h2>AI-Powered Event Correlation</h2>
 
-        <p>The correlation engine is where individual events become a narrative. When ORYN sees the same source IP appear in three or more different event types within a 10-minute window, it automatically escalates severity to critical and routes the correlated alert to the human operator.</p>
+        <p>The correlation engine is where individual events become a narrative. When KAELEN sees the same source IP appear in three or more different event types within a 10-minute window, it automatically escalates severity to critical and routes the correlated alert to the human operator.</p>
 
         <p>Example: an IP triggers a brute force alert, then appears in a lateral movement event, then shows up in an outbound data volume anomaly. Individually, each event might be medium severity. Together, they're a textbook attack chain: initial access &rarr; lateral movement &rarr; exfiltration.</p>
 
@@ -147,13 +147,13 @@
 
         <h2>Multi-Tenant Client Isolation</h2>
 
-        <p>ORYN is built for MSSP (Managed Security Service Provider) deployment. Every event, baseline, IOC lookup, and certificate watch entry is tagged with a client identifier at the database layer.</p>
+        <p>KAELEN is built for MSSP (Managed Security Service Provider) deployment. Every event, baseline, IOC lookup, and certificate watch entry is tagged with a client identifier at the database layer.</p>
 
         <p>Cross-client correlation is architecturally impossible &mdash; the database queries are scoped per client ID, not filtered after retrieval. This isn't a software policy. It's a structural guarantee. Client A's traffic patterns can never influence Client B's alerts.</p>
 
         <h2>The Safety Model</h2>
 
-        <p>ORYN's safety architecture is built on three principles:</p>
+        <p>KAELEN's safety architecture is built on three principles:</p>
 
         <ol>
             <li><strong>Passive only.</strong> Zero packet injection. The sensor physically cannot send traffic onto your network. This is enforced by the network tap configuration, not by software.</li>
@@ -167,14 +167,14 @@
 
         <p>If you're a small business reading this and thinking "this sounds like what a Fortune 500 company would have" &mdash; that's the point. The technology gap between enterprise security and small business security is artificial. It exists because enterprise tools are priced for enterprise budgets.</p>
 
-        <p>ORYN closes that gap. The sensor runs on commodity hardware. The intelligence is software. The deployment is a physical device and a WireGuard tunnel. The monthly cost is less than what most businesses spend on coffee.</p>
+        <p>KAELEN closes that gap. The sensor runs on commodity hardware. The intelligence is software. The deployment is a physical device and a WireGuard tunnel. The monthly cost is less than what most businesses spend on coffee.</p>
 
-        <p>Your network is being scanned right now by someone who doesn't care that you're a small business. They care that you're an easy target. ORYN makes you a hard one.</p>
+        <p>Your network is being scanned right now by someone who doesn't care that you're a small business. They care that you're an easy target. KAELEN makes you a hard one.</p>
 
         <div class="article-cta">
-            <h3>Want to see ORYN in action?</h3>
-            <p>We'll run a free assessment of your current security posture and show you exactly what ORYN would detect on your network.</p>
-            <a href="mailto:contact@alihasanassi.com?subject=ORYN%20Sensor%20Demo" class="btn btn-primary">
+            <h3>Want to see KAELEN in action?</h3>
+            <p>We'll run a free assessment of your current security posture and show you exactly what KAELEN would detect on your network.</p>
+            <a href="mailto:contact@alihasanassi.com?subject=KAELEN%20Sensor%20Demo" class="btn btn-primary">
                 <span>Schedule a Demo</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
@@ -186,7 +186,7 @@
         <div class="container">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <span class="logo-text">ORYN</span>
+                    <span class="logo-text">KAELEN</span>
                     <p>AI-powered cybersecurity for businesses that can't afford to be unprotected.</p>
                 </div>
                 <div class="footer-cols">
@@ -212,8 +212,8 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <span>&copy; 2026 ORYN Security. All rights reserved.</span>
-                    <span class="footer-location">Built in Connecticut.</span>
+                    <span>&copy; 2026 KAELEN Security. All rights reserved.</span>
+                    <span class="footer-location">Built in San Diego.</span>
                 </div>
             </div>
         </div>

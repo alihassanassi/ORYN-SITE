@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   ORYN Security — style.css
+   KAELEN Security — style.css
    Premium dark cybersecurity aesthetic
    ═══════════════════════════════════════════════════════════════════ */
 
@@ -298,8 +298,13 @@ img { max-width: 100%; display: block; }
 }
 .trust-item svg { color: var(--accent); flex-shrink: 0; }
 
+/* ── RESEARCH ────────────────────────────────────────────────────── */
+#research { padding: 140px 0; background: var(--bg-alt); }
+#research .blog-grid { gap: 28px; }
+#research .blog-card { background: var(--bg-card); }
+
 /* ── PROBLEM ──────────────────────────────────────────────────────── */
-#problem { padding: 140px 0; }
+#problem { padding: 140px 0; background: var(--bg-alt); }
 
 .problem-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
@@ -358,7 +363,7 @@ img { max-width: 100%; display: block; }
 .section-header p { color: var(--text-dim); font-size: 1.08rem; line-height: 1.7; }
 
 /* ── SERVICES ─────────────────────────────────────────────────────── */
-#services { padding: 140px 0; background: var(--bg-alt); }
+#services { padding: 140px 0; }
 
 .services-grid {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
@@ -443,7 +448,7 @@ img { max-width: 100%; display: block; }
 .tech-feature h4 { font-size: 1.1rem; margin-bottom: 12px; font-weight: 700; }
 .tech-feature p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.65; }
 
-/* ── WHY ORYN ─────────────────────────────────────────────────────── */
+/* ── WHY KAELEN ──────────────────────────────────────────────────── */
 #why { padding: 140px 0; background: var(--bg-alt); }
 
 .why-grid {
