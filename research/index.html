@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research — Ali Hassan Assi</title>
+    <meta name="description" content="Three papers on autonomous AI safety: the constitution, the ambient architecture, and personal alignment.">
+    <meta name="author" content="Ali Hassan Assi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alihasanassi.com/research/">
+    <meta property="og:title" content="Research — Ali Hassan Assi">
+    <meta property="og:description" content="Three papers on autonomous AI safety: the constitution, the ambient architecture, and personal alignment.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alihasanassi.com/research/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body class="research-index">
+    <main class="page">
+        <nav class="nav-back"><a href="../">&larr; Home</a></nav>
+        <header class="paper-header">
+            <h1>Research</h1>
+            <p class="paper-subtitle">Three papers on autonomous AI safety.</p>
+            <p class="byline">by Ali Hassan Assi</p>
+            <p class="byline">v1.0 &mdash; 2026-04-20</p>
+        </header>
+        <article class="paper-body">
+<p>Three pieces, written in April 2026, arguing that safe autonomous AI requires three load-bearing things the current industry does not build deliberately: a structural constitution below the product, an ambient-system architecture above it, and a personal-alignment layer inside the operator running it. All three are argued from one working system — JARVIS, a local-first AI cybersecurity operations console built in 33 days on one workstation by one operator: 689 authored Python files, 232,458 lines of code, 27 subsystems, 81,380 hash-chained audit records as of 2026-04-18.</p>
+<hr>
+<h2 id="1-the-constitution-before-the-product">1. The Constitution Before the Product</h2>
+<p>Most AI systems are built product-first and wrapped in safety afterward. The claim of this paper is that autonomous AI systems with real capability have to be built the other way around — the safety architecture written first, as running code the product cannot bypass. The paper describes a five-layer architecture that inverts the usual arrangement (cryptographic primitives innermost, personality outermost), a serial chain of seven fail-closed gates every autonomous action must traverse, a hash-chained audit log with a documented chain break repaired and preserved, and a kill switch framed as a covenant between operator and system. One concrete case study: an April 13, 2026 trust breach where the constitution held.</p>
+<p>→ <a href="paper_01_constitution.html">Read paper 1 — The Constitution Before the Product</a></p>
+<h2 id="2-the-ambient-intelligence-problem">2. The Ambient Intelligence Problem</h2>
+<p>A chat assistant that forgets nothing is annoying. An ambient system that does the same is uninhabitable. The paper argues that AI systems which live alongside an operator — not inside a chat window — require memory, attention, interruption, personality, and off-mode as first-class subsystems with their own data structures, not as UX polish. Contributions include a six-layer memory hierarchy with decay constants and promotion rules, a seven-factor salience engine with an explanation surface, an interruption policy treating interruption as an operator right rather than a system default, and a personality layer realized as persistent state. Reachy is discussed as a design choice, not a requirement.</p>
+<p>→ <a href="paper_02_ambient.html">Read paper 2 — The Ambient Intelligence Problem</a></p>
+<h2 id="3-what-dario-didnt-say">3. What Dario Didn't Say</h2>
+<p>Alignment literature treats the human in the loop as a constant. This essay argues that the human is the thing that drifts, and that <em>personal alignment</em> — the property of the operator-AI system considered as a whole — is a load-bearing beam of AI safety that currently nobody reinforces. It names the operator erosion dynamic (seven steps, every one lived), uses the April 13 trust breach as the paradigm case for why personal alignment matters, enumerates five things operators need (a disagreement-partner, unmediated routines, small-error practice, external accountability, willingness to turn it off), and names concrete things a lab could do. Written as an essay, not a conference paper.</p>
+<p>→ <a href="paper_03_dario.html">Read paper 3 — What Dario Didn't Say</a></p>
+<hr>
+<h2 id="how-to-read-them">How to read them</h2>
+<p>The papers are independent. Each argues its own claim and can be read alone. If you want them in order: Paper 1 is the substrate, Paper 2 is what gets built on top of it, Paper 3 is about the human running the result. If you are arriving from an AI safety or alignment background, Paper 3 is probably the one that opens the conversation most directly. If you are arriving from a systems or security background, Paper 1 is. If you are arriving from HCI or ambient computing, Paper 2 is.</p>
+<p>The author is a twenty-two-year-old self-taught builder in San Diego. The papers are offered in that spirit — one operator, one machine, working out loud. Corrections welcome.</p>
+        <section class="facts-section">
+            <h2 id="system-facts">System facts (verified 2026-04-18)</h2>
+<p>Numbers below are the v1.0 canonical figures, verified by static inspection against the live JARVIS source tree and databases on 2026-04-18. Every number quoted in the three papers matches this block.</p>
+<table>
+<thead><tr><th style="text-align:left">Fact</th><th style="text-align:left">Value</th></tr></thead>
+<tbody>
+<tr><td>Authored Python files</td><td>689</td></tr>
+<tr><td>Lines of authored code</td><td>232,458</td></tr>
+<tr><td>Subsystems</td><td>27</td></tr>
+<tr><td>Registered tools</td><td>260</td></tr>
+<tr><td>Hash-chained audit records</td><td>81,380</td></tr>
+<tr><td>Brain-graph nodes / edges</td><td>4,681 / 4,337</td></tr>
+<tr><td>Days of continuous development</td><td>33 (since 2026-03-16)</td></tr>
+</tbody>
+</table>
+<p>Total repo (including vendored <code>cb-mpc</code> and tests): 731 files, 241,487 lines. The figures above are the authored core &mdash; JARVIS is 689 Python files Ali wrote by hand.</p>
+
+        </section>
+        </article>
+        <footer class="paper-footer">
+            <p>PDFs are forthcoming. For now these pages are the canonical v1.0 source.</p>
+            <p>Correspondence: <a href="mailto:contact@alihasanassi.com">contact@alihasanassi.com</a>. Updates: <a href="/research/">alihasanassi.com/research</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>
