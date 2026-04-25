@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Research — Ali Hassan Assi</title>
-    <meta name="description" content="Three papers on autonomous AI safety: the constitution, the ambient architecture, and personal alignment.">
+    <meta name="description" content="Four papers on autonomous AI safety: the constitution, the ambient architecture, personal alignment, and the 240K decomposition. Plus a companion document with errata and engineering substrate.">
     <meta name="author" content="Ali Hassan Assi">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://alihasanassi.com/research/">
     <meta property="og:title" content="Research — Ali Hassan Assi">
-    <meta property="og:description" content="Three papers on autonomous AI safety: the constitution, the ambient architecture, and personal alignment.">
+    <meta property="og:description" content="Four papers on autonomous AI safety: the constitution, the ambient architecture, personal alignment, and the 240K decomposition. Plus a companion document with errata and engineering substrate.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alihasanassi.com/research/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,12 +23,12 @@
         <nav class="nav-back"><a href="../">&larr; Home</a></nav>
         <header class="paper-header">
             <h1>Research</h1>
-            <p class="paper-subtitle">Three papers on autonomous AI safety.</p>
+            <p class="paper-subtitle">Four papers on autonomous AI safety, and a companion document.</p>
             <p class="byline">by Ali Hassan Assi</p>
-            <p class="byline">v1.0 &mdash; 2026-04-20</p>
+            <p class="byline">v1.0 &mdash; 2026-04-20 (Papers 1–3); 2026-04-24 (Paper 4 + companion)</p>
         </header>
         <article class="paper-body">
-<p>Three pieces, written in April 2026, arguing that safe autonomous AI requires three load-bearing things the current industry does not build deliberately: a structural constitution below the product, an ambient-system architecture above it, and a personal-alignment layer inside the operator running it. All three are argued from one working system — JARVIS, a local-first AI cybersecurity operations console built in 33 days on one workstation by one operator: 689 authored Python files, 232,458 lines of code, 27 subsystems, 81,380 hash-chained audit records as of 2026-04-18.</p>
+<p>Three architectural papers, written in April 2026, arguing that safe autonomous AI requires three load-bearing things the current industry does not build deliberately: a structural constitution below the product, an ambient-system architecture above it, and a personal-alignment layer inside the operator running it. A fourth paper grounds the trilogy in an empirical decomposition of the codebase: where the lines of code actually live, what fraction of the tool surface shells out, how the consciousness layer breaks down by operational tier, what the audit log records. All four papers are argued from one working system — JARVIS, a local-first AI cybersecurity operations console developed by one operator on one workstation since 2026-03-16. Trilogy snapshot (Papers 1–3): 689 authored Python files, 232,458 lines of code, 27 subsystems, 81,380 hash-chained audit records as of 2026-04-18. Paper 4 uses a later snapshot (2026-04-22). A <a href="companion_2026-Q2.html">companion document</a> carries errata, extensions, snapshot-drift across the four papers, and an "Honest Gaps" list preserved verbatim from the engineering substrate audit.</p>
 <hr>
 <h2 id="1-the-constitution-before-the-product">1. The Constitution Before the Product</h2>
 <p>Most AI systems are built product-first and wrapped in safety afterward. The claim of this paper is that autonomous AI systems with real capability have to be built the other way around — the safety architecture written first, as running code the product cannot bypass. The paper describes a five-layer architecture that inverts the usual arrangement (cryptographic primitives innermost, personality outermost), a serial chain of seven fail-closed gates every autonomous action must traverse, a hash-chained audit log with a documented chain break repaired and preserved, and a kill switch framed as a covenant between operator and system. One concrete case study: an April 13, 2026 trust breach where the constitution held.</p>
@@ -39,14 +39,16 @@
 <h2 id="3-what-dario-didnt-say">3. What Dario Didn't Say</h2>
 <p>Alignment literature treats the human in the loop as a constant. This essay argues that the human is the thing that drifts, and that <em>personal alignment</em> — the property of the operator-AI system considered as a whole — is a load-bearing beam of AI safety that currently nobody reinforces. It names the operator erosion dynamic (seven steps, every one lived), uses the April 13 trust breach as the paradigm case for why personal alignment matters, enumerates five things operators need (a disagreement-partner, unmediated routines, small-error practice, external accountability, willingness to turn it off), and names concrete things a lab could do. Written as an essay, not a conference paper.</p>
 <p>→ <a href="paper_03_dario.html">Read paper 3 — What Dario Didn't Say</a></p>
+<h2 id="4-the-240k-decomposition">4. The 240K Decomposition</h2>
+<p>A direct empirical answer to the dismissal that local-first agent systems are "thin wrappers around CLIs." The paper audits JARVIS along four independent axes: codebase decomposition by functional bucket (the policy/safety surface is 1.1% of the tree; behavioral/personality is 6.9%; tests + GUI + scaffolding is 73.6%), tool dispatch by wrapper class (12 of 183 dispatch functions shell out, 11.2% of tool LOC; the rest is original Python), consciousness modules by operational tier (17 of 35 reach the operator on a live turn; 11 accumulate ambient state; 7 are inert or conditionally gated), and the 87,315-row audit log by event type (78.7% concentrated in three event types; autonomy decisions sum to 5.5%). Across all four axes the scaffolding-to-decision ratio sits in the same order of magnitude (~9:1 to ~14:1). The paper's claim is narrow: agent systems at scale decompose into scaffolding surrounded by small moments of decision, not model calls surrounded by tools — and this contradicts the wrapper framing at every axis.</p>
+<p>→ <a href="paper_04_decomposition.html">Read paper 4 — The 240K Decomposition</a></p>
 <hr>
 <h2 id="how-to-read-them">How to read them</h2>
-<p>The papers are independent. Each argues its own claim and can be read alone. If you want them in order: Paper 1 is the substrate, Paper 2 is what gets built on top of it, Paper 3 is about the human running the result. If you are arriving from an AI safety or alignment background, Paper 3 is probably the one that opens the conversation most directly. If you are arriving from a systems or security background, Paper 1 is. If you are arriving from HCI or ambient computing, Paper 2 is.</p>
+<p>The papers are independent. Each argues its own claim and can be read alone. If you want them in order: Paper 1 is the substrate, Paper 2 is what gets built on top of it, Paper 3 is about the human running the result, Paper 4 is the empirical floor under all three. If you are arriving from an AI safety or alignment background, Paper 3 is probably the one that opens the conversation most directly. If you are arriving from a systems or security background, Paper 1 is. If you are arriving from HCI or ambient computing, Paper 2 is. If you want the empirical answer to "is this real engineering or a thin wrapper?", Paper 4 is. The <a href="companion_2026-Q2.html">companion document</a> is for readers who want errata, antecedent literature pointers (Bainbridge, Hollnagel), and the "Honest Gaps" list — everywhere earlier claims about the system did not match code reality.</p>
 <p>The author is a twenty-two-year-old self-taught builder in San Diego. The papers are offered in that spirit — one operator, one machine, working out loud. Corrections welcome.</p>
-            <p class="read-notes">Built with Anthropic's Claude Code as a continuous pair-programmer. The architecture, safety model, audit methodology, and load-bearing design decisions are mine.</p>
         <section class="facts-section">
             <h2 id="system-facts">System facts (verified 2026-04-18)</h2>
-<p>Numbers below are the v1.0 canonical figures, verified by static inspection against the live JARVIS source tree and databases on 2026-04-18. Every number quoted in the three papers matches this block.</p>
+<p>Numbers below are the v1.0 canonical figures for Papers 1, 2, and 3, verified by static inspection against the live JARVIS source tree and databases on 2026-04-18. Every number quoted in those three papers matches this block.</p>
 <table>
 <thead><tr><th style="text-align:left">Fact</th><th style="text-align:left">Value</th></tr></thead>
 <tbody>
@@ -60,6 +62,7 @@
 </tbody>
 </table>
 <p>Total repo (including vendored <code>cb-mpc</code> and tests): 731 files, 241,487 lines. The figures above are the authored core &mdash; JARVIS is 689 Python files Ali wrote by hand.</p>
+<p><strong>Paper 4 uses a later snapshot</strong> (2026-04-22: 766 files, 248,809 lines, 87,315 audit rows). The <a href="companion_2026-Q2.html">companion document</a> carries the full snapshot-drift table across all three dated audits.</p>
 
         </section>
         </article>

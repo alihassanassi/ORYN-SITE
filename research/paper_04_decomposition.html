@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 240K Decomposition — Ali Hassan Assi</title>
+    <meta name="description" content="What a single-operator agent system is actually made of, measured.">
+    <meta name="author" content="Ali Hassan Assi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alihasanassi.com/research/paper_04_decomposition.html">
+    <meta property="og:title" content="The 240K Decomposition">
+    <meta property="og:description" content="What a single-operator agent system is actually made of, measured.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://alihasanassi.com/research/paper_04_decomposition.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body class="paper">
+    <main class="page">
+        <nav class="nav-back"><a href="./">&larr; Research</a> &middot; <a href="../">Home</a></nav>
+        <header class="paper-header">
+            <h1>The 240K Decomposition</h1>
+            <p class="paper-subtitle">What a single-operator agent system is actually made of, measured.</p>
+            <p class="byline">by Ali Hassan Assi</p>
+            <p class="byline">v1.0 &mdash; 2026-04-24</p>
+            <p class="stat-block">System snapshot (2026-04-22): 766 Python files · 248,809 lines of code · 27 subsystems · 258 registered tools · 183 dispatch functions · 87,315 hash-chained audit records · 35 consciousness modules · 37 days of continuous development since 2026-03-16.</p>
+        </header>
+        <article class="paper-body">
+<p><em>Draft note: numbers in this document are the 2026-04-22 audit snapshot. Re-verified 2026-04-24: fresh enumeration returns 787 files, 252,648 LOC, 88,491 audit rows — a 1.5% upward drift in both code and audit volume over 48 hours of active development. Bucket ratios, wrapper-class proportions, consciousness-tier counts, and the four claims are unchanged. Body text retains the 2026-04-22 numbers for internal consistency with the evidence dossier; a release pass would swap in the verification-day totals.</em></p>
+<hr>
+<h2 id="abstract">Abstract</h2>
+<p>There is a dismissal of local-first agent systems — "thin wrappers around CLIs" — that has real weight behind it and deserves a direct answer rather than a rhetorical one. This paper answers it empirically. I audited JARVIS, a single-operator local-first AI cybersecurity operations console, at 248,809 lines of Python across 766 files, and decomposed the codebase along four independent axes. Table 1 decomposes by functional bucket and shows that the "core intelligence" of the system (orchestration, behavioral, tools, runtime daemons) is about 34% of the codebase, roughly matched in size by the GUI alone at 17% plus tests/utilities at 26%. Table 2 decomposes the 258-tool surface by wrapper class: of 183 dispatch functions, only 12 (6.6% of functions, 11.2% of tool code) shell out to external binaries; the rest are original Python. Table 3 decomposes the 35 consciousness modules into three operational tiers — 17 that reach the operator on a live turn, 11 that accumulate ambient state between turns, and 7 that are currently inert or conditionally gated. Table 4 is the 87,315-row audit log histogram over 24 days: three event types account for 78.7% of rows, and the actual autonomy-decision events sum to 5.5%. The four axes tell the same story in different dialects. A local-first agent system is scaffolding surrounded by small moments of decision; the wrapper framing misreads what the code is doing. The five explicit limitations are N=1, heuristic methodology, no version-control history at snapshot, snapshot-date drift, and self-reporting bias on operator-side observations. I propose what replication at N&gt;1 would need to look like.</p>
+<hr>
+<h2 id="1-the-dismissal-the-paper-is-addressing">1. The dismissal the paper is addressing</h2>
+<p>This paper examines a specific dismissal. "Local-first agent systems are wrappers around CLIs" is a position with weight behind it. The reference to shell-outs is real — security tooling especially does invoke <code>subfinder</code>, <code>httpx</code>, <code>nuclei</code>, and the rest. The prior that a single operator cannot produce serious engineering in thirty-three days is reasonable given the base rate. And the AI industry has, in fact, shipped many genuinely thin wrappers and called them agents. The critique deserves a direct answer, not a dismissal of the dismissal.</p>
+<p>The answer I want to give is structural rather than rhetorical. What I will argue is that when you decompose a real single-operator agent system at scale — files, lines of code, tool dispatch functions, behavioral modules, audit events — the wrapper framing fails to fit any of the four axes, and the reason it fails is instructive. It fails because agent systems do not concentrate in the place the critique points at. They accumulate in the scaffolding around the small decision moments, and the scaffolding is the work.</p>
+<p>The specific system is JARVIS: 766 authored Python files, 248,809 lines of code, 27 subsystems, 258 tools, 87,315 hash-chained audit records at the time of snapshot. It is single-operator, single-workstation, local-first, and has been under continuous development for 37 days. The preceding three papers in this sequence have described its <a href="paper_01_constitution.html">safety architecture</a>, its <a href="paper_02_ambient.html">ambient-intelligence layer</a>, and the <a href="paper_03_dario.html">personal-alignment load on its operator</a>. This paper describes its <em>shape</em> — what the code looks like when you break it apart and count.</p>
+<p>I want to be honest about what this paper is not. It is not a benchmark; there is no performance claim measured against other systems. It is not a how-to; the numbers are evidence, not instructions. It is not a defense of the code's quality; quality is a separate axis the audit does not speak to. What the audit gives us is a four-table empirical answer to the question <em>what is this thing, actually, when you weigh it</em>, and that answer turns out to contradict the "wrapper" framing at every table. If someone wants to argue the system is badly designed, or overbuilt, or under-tested, the tables do not prevent that argument. They only prevent the argument that the code is a thin shell.</p>
+<p>The claim of this paper, then, is narrow and load-bearing: agent systems at scale decompose into scaffolding surrounded by small moments of decision, not into model calls surrounded by tools. Builders who budget for the decisions will systematically under-budget the scaffolding by approximately an order of magnitude, and the consequence of that mis-budgeting is that new agent systems ship half-finished and get dismissed as wrappers — because, under-budgeted, that is in fact what they are.</p>
+<h2 id="2-how-the-audit-was-done">2. How the audit was done</h2>
+<p>The audit is an extraction, not a benchmark. Four tables, read-only against the running system, no code mutations, no inference beyond arithmetic.</p>
+<p><strong>File and line counts.</strong> Python files enumerated with <code>Get-ChildItem -Recurse -Filter *.py</code>; per-file physical-line counts via <code>(Get-Content | Measure-Object -Line).Lines</code>. This counts blank lines, comments, and docstrings alongside executable code — the same convention <code>cloc</code> uses for its "code + comment + blank" mode. A statement-only count would drop totals by roughly 15–20% uniformly across the tree; bucket <em>ratios</em> are approximately preserved under that alternative, though heavily-docstringed directories (notably <code>consciousness/</code>) would shift by one to three percentage points. The choice to use physical lines was made for reproducibility; anyone with PowerShell and <code>Get-Content</code> can replicate the totals without installing additional tools.</p>
+<p><strong>Authored vs vendored.</strong> Everything under <code>cb-mpc/</code> — a C++ multi-party computation library with Python test harnesses, vendored whole — is bucketed as <em>generated/vendor</em> (42 files, 9,085 LOC). Nothing else in the tree is auto-generated: no protobuf output, no OpenAPI stubs, no ORM migrations. The "authored" designation therefore applies to 724 of 766 files.</p>
+<p><strong>Directories excluded from enumeration.</strong> <code>__pycache__/</code>, <code>.venv/</code>, <code>venv/</code>, <code>node_modules/</code>, <code>jarvis_backups/</code>, <code>jarvis_patches/</code>, backup and preview directories, and non-code content (markdown, JSON, HTML, SVG, audio samples, model weights). This paper is about Python code volume specifically.</p>
+<p><strong>Tool enumeration.</strong> Tool schema count comes from a regex of <code>"name"\s*:\s*"([a-zA-Z_0-9]+)"</code> against <code>tools/registry.py</code>'s <code>TOOL_SCHEMAS</code> list: 258 unique schemas. Dispatch function count comes from <code>^(async\s+)?def\s+(tool_[a-zA-Z_0-9]+)\s*\(</code> across all files in <code>tools/</code>: 183 functions. The gap — 258 schemas, 183 dispatch functions — is closed by inline handlers in <code>registry.py</code>'s <code>_dispatch_inner()</code> that forward into autonomy and intelligence modules without a standalone wrapper function; these inline handlers are counted in the schema total but not in the dispatch-function total. The 12-function shell-wrapper subset was identified by searching each dispatch body for <code>subprocess.*</code>, <code>os.system</code>, <code>Popen(</code>, <code>asyncio.create_subprocess</code>, <code>shutil.which(</code>, or the <code>_enqueue_to_parrot</code> call that routes aggressive tools to a separate Parrot OS virtual machine. Each of the 12 flagged functions was manually verified.</p>
+<p><strong>Consciousness wiring.</strong> For each of the 35 substantive modules in <code>consciousness/</code>, I traced consumers via <code>Select-String</code> for <code>consciousness.&amp;lt;module&amp;gt;</code> across the tree, then manually verified every hit at the call site in <code>agents/worker.py</code>. "Reaches operator this turn" is true only if the module's output is read during the assembly of a single reply — either in the system-prompt build phase or in the post-LLM prepend phase — and not if it writes state that will be consumed later by another daemon loop. The per-turn definition is strict: a module that writes a row to a database every five minutes, consumed by a different subsystem that emits text on some other schedule, is counted as ambient, not live.</p>
+<p><strong>Audit histogram.</strong> Straight SQL: <code>SELECT event_type, COUNT(*), MIN(ts), MAX(ts) FROM audit_log GROUP BY event_type ORDER BY COUNT(*) DESC</code> against <code>audit_log.db</code>. Result: 87,315 rows across 42 distinct event types, spanning 2026-03-29 03:46:52Z to 2026-04-22 16:10:28Z (approximately 24 days). Emission sites for each event type were identified by grepping the source tree for the event literal and reading the surrounding context.</p>
+<p><strong>N=1.</strong> This is a single repository, a single operator, a single local-first architecture, a single 24-day audit window. I state this here so the reader is oriented for the whole paper: absolute numbers are to be read as an existence proof that one local-first agent can decompose the way this one does, not as population statistics. Replication across other local-first agent systems would be needed to generalize, and I sketch what that replication would look like in §5.</p>
+<p><strong>No git history.</strong> The project was not under version control during the snapshot period. <code>.git/</code> does not exist in this tree. This is a real limitation — commit cadence, regression history, and authorship timeline cannot be reconstructed from repository artifacts — and it is a cost paid for the speed of the build. Going forward, the project initiates a git repository; this manuscript and the evidence dossier serve as the t=0 reference point for that history.</p>
+<h2 id="3-four-tables">3. Four tables</h2>
+<p>Each of the four tables corresponds to one load-bearing claim. I present each table with a short setup, the table itself, and two to three paragraphs of reading.</p>
+<h3 id="31-table-1-codebase-by-functional-bucket">3.1 Table 1 — Codebase by functional bucket</h3>
+<p>Thirteen buckets, mutually exclusive, covering 100% of the tree. The mapping of directories to buckets is described below the table; a small number of non-obvious assignments are explained explicitly.</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Bucket</th>
+<th style="text-align:right">Files</th>
+<th style="text-align:right">LOC</th>
+<th style="text-align:right">% of total</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">tools/adapters</td>
+<td style="text-align:right">35</td>
+<td style="text-align:right">17,430</td>
+<td style="text-align:right">7.0%</td>
+</tr>
+<tr>
+<td style="text-align:left">orchestration/intelligence</td>
+<td style="text-align:right">81</td>
+<td style="text-align:right">35,314</td>
+<td style="text-align:right">14.2%</td>
+</tr>
+<tr>
+<td style="text-align:left">policy/safety</td>
+<td style="text-align:right">13</td>
+<td style="text-align:right">2,621</td>
+<td style="text-align:right">1.1%</td>
+</tr>
+<tr>
+<td style="text-align:left">persistence/state</td>
+<td style="text-align:right">19</td>
+<td style="text-align:right">7,448</td>
+<td style="text-align:right">3.0%</td>
+</tr>
+<tr>
+<td style="text-align:left">runtime/daemons</td>
+<td style="text-align:right">34</td>
+<td style="text-align:right">15,713</td>
+<td style="text-align:right">6.3%</td>
+</tr>
+<tr>
+<td style="text-align:left">behavioral/personality</td>
+<td style="text-align:right">37</td>
+<td style="text-align:right">17,185</td>
+<td style="text-align:right">6.9%</td>
+</tr>
+<tr>
+<td style="text-align:left">voice/audio</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">9,032</td>
+<td style="text-align:right">3.6%</td>
+</tr>
+<tr>
+<td style="text-align:left">gui</td>
+<td style="text-align:right">75</td>
+<td style="text-align:right">42,205</td>
+<td style="text-align:right">17.0%</td>
+</tr>
+<tr>
+<td style="text-align:left">worldview/spatial</td>
+<td style="text-align:right">25</td>
+<td style="text-align:right">5,806</td>
+<td style="text-align:right">2.3%</td>
+</tr>
+<tr>
+<td style="text-align:left">research/knowledge</td>
+<td style="text-align:right">27</td>
+<td style="text-align:right">6,934</td>
+<td style="text-align:right">2.8%</td>
+</tr>
+<tr>
+<td style="text-align:left">tests/utilities</td>
+<td style="text-align:right">295</td>
+<td style="text-align:right">64,899</td>
+<td style="text-align:right">26.1%</td>
+</tr>
+<tr>
+<td style="text-align:left">generated/vendor</td>
+<td style="text-align:right">42</td>
+<td style="text-align:right">9,085</td>
+<td style="text-align:right">3.7%</td>
+</tr>
+<tr>
+<td style="text-align:left">other</td>
+<td style="text-align:right">56</td>
+<td style="text-align:right">15,137</td>
+<td style="text-align:right">6.1%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total</strong></td>
+<td style="text-align:right"><strong>766</strong></td>
+<td style="text-align:right"><strong>248,809</strong></td>
+<td style="text-align:right"><strong>100.0%</strong></td>
+</tr>
+</tbody></table>
+<p>The non-obvious assignments: <code>storage/audit_log.py</code> (950 LOC) is pulled out of persistence and placed in policy/safety, because it is the tamper-evident safety surface rather than a generic persistence helper. <code>runtime/kill_switch.py</code> (133 LOC) is in policy/safety, not runtime/daemons, because it is a gate rather than a daemon. <code>bridge/scope.py</code> (412 LOC) is in policy/safety. <code>voice/profiles.py</code> (246 LOC) is in behavioral/personality because it encodes per-persona voice parameters — persona data, not audio plumbing. Root-level scripts (<code>check_*</code>, <code>fix_*</code>, <code>seed_*</code>, <code>main.py</code> boot glue) are bucketed with <code>tests/</code> and <code>scripts/</code> as tests/utilities. These decisions each shift the containing buckets by less than half a percentage point; reclassifying any one of them does not change the shape of the answer.</p>
+<p>The first reading of the table is the location of mass. The single largest bucket is tests/utilities at 26.1%, followed by GUI at 17.0% and orchestration/intelligence at 14.2%. Those three together account for 57.3% of the project. The "agent" — the model-adjacent decision-making code someone would point at if you asked which files are the AI — is in orchestration/intelligence and policy/safety and some of runtime/daemons, summing to roughly 22% of the tree. Everything else is what lets those files run: the database schema, the voice pipeline, the daemons that keep state coherent between turns, the windows that display results, the tests and scripts that verify and seed the rest.</p>
+<p>The second reading is the surprise at the small end. The policy/safety bucket — the entire tamper-evident audit log, kill switch, scope gate, security stack, and autonomy policy that makes autonomous operation legally defensible — is 2,621 lines across 13 files, about 1.1% of the project. The behavioral/personality layer is 17,185 lines across 37 files, roughly 6.9%. The safety perimeter is small because the work safety does is narrow and load-bearing; the behavioral layer is larger because the work of making a system feel coherent between turns is broad and open-ended. These two buckets together — the ones most often caricatured as "most of the code" in dismissive summaries — are under 8% combined. The real mass sink is the scaffolding around the agent, not the agent itself.</p>
+<p>The third reading is the consequence. A builder who budgets for an agent as "model plus tools" is budgeting roughly 22% of what actually ships. The other 78% is not discretionary. Without persistence, the agent forgets. Without daemons, it cannot react between turns. Without a GUI, it cannot be operated. Without tests and utilities, the rest regresses. The implication is not that the 22% is the real system and the 78% is overhead; it is that the 22% cannot exist operationally without the 78%.</p>
+<h3 id="32-table-2-tool-surface-by-wrapper-class">3.2 Table 2 — Tool surface by wrapper class</h3>
+<p>The 258 tool schemas are implemented by 183 dispatch functions plus roughly 75 inline handlers in <code>registry.py</code> itself. The 183 dispatch functions are where the wrapper question can be answered directly. I classified each by body inspection into one of four wrapper classes: <strong>shell</strong> (calls out to an external binary), <strong>api</strong> (hits an HTTP endpoint), <strong>db</strong> (reads or writes local storage), or <strong>native</strong> (pure in-process Python).</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Class</th>
+<th style="text-align:right">Dispatch functions</th>
+<th style="text-align:right">% of functions</th>
+<th style="text-align:right">LOC</th>
+<th style="text-align:right">% of tool LOC</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">shell</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">6.6%</td>
+<td style="text-align:right">1,072</td>
+<td style="text-align:right">11.2%</td>
+</tr>
+<tr>
+<td style="text-align:left">api</td>
+<td style="text-align:right">~46</td>
+<td style="text-align:right">25.1%</td>
+<td style="text-align:right">~2,710</td>
+<td style="text-align:right">28.3%</td>
+</tr>
+<tr>
+<td style="text-align:left">db</td>
+<td style="text-align:right">~38</td>
+<td style="text-align:right">20.8%</td>
+<td style="text-align:right">~2,150</td>
+<td style="text-align:right">22.5%</td>
+</tr>
+<tr>
+<td style="text-align:left">native</td>
+<td style="text-align:right">~87</td>
+<td style="text-align:right">47.5%</td>
+<td style="text-align:right">~3,644</td>
+<td style="text-align:right">38.0%</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total</strong></td>
+<td style="text-align:right"><strong>183</strong></td>
+<td style="text-align:right"><strong>100.0%</strong></td>
+<td style="text-align:right"><strong>9,576</strong></td>
+<td style="text-align:right"><strong>100.0%</strong></td>
+</tr>
+</tbody></table>
+<p>The shell-wrapper set is short enough to name in full: <code>tool_scan_git_exposure</code>, <code>tool_run_nuclei</code>, <code>tool_get_wayback_urls</code>, <code>tool_url_analyze</code>, <code>tool_run_subfinder</code>, <code>tool_run_httpx</code>, <code>tool_list_capabilities</code>, <code>tool_whois_lookup</code>, <code>tool_get_clipboard</code>, <code>tool_run_command</code>, <code>tool_open_app</code>, <code>tool_set_voice</code>. These shell out to the well-known Go and Python security CLIs (<code>subfinder</code>, <code>httpx</code>, <code>nuclei</code>, <code>git ls-remote</code>), plus <code>pyperclip</code>/<code>xclip</code> for clipboard, <code>powershell Start-Process</code> for application launch, and Windows SAPI for voice. Every other dispatch function — all 171 of them — is original Python. The api class hits NVD for CVE data, GitHub for code search, Gmail for mail, HackerOne for bounty platform operations, Wayback for historical URLs, OpenSky for aircraft tracking, USGS for earthquake feeds, Stripe for credential validation, and a handful of others. The db class reads and writes the 55-table operational SQLite database and the 42-event-type audit log. The native class is pure in-process Python: state readers, dispatchers, formatters, heuristic scorers.</p>
+<p>The first reading is direct. Of 183 tool dispatch functions, 12 — 6.6% — shell out to external binaries, and those 12 account for 11.2% of tool code. The common dismissal that local-first agent systems are "thin wrappers around existing tools" does not fit this distribution. The dominant wrapper class by both function count and line count is <em>native</em>: original orchestration logic operating on in-process state. By line count, the api class is second. The shell wrappers are the smallest of the four classes on both axes.</p>
+<p>The second reading is where the glue actually lives. Outside <code>tools/</code>, the shell-wrapper pattern effectively disappears. The <code>agents/</code>, <code>intelligence/</code>, <code>autonomy/</code>, <code>consciousness/</code>, and <code>memory/</code> directories — 35,314 LOC of orchestration plus 17,185 LOC of behavioral plus 7,448 LOC of persistence — are pure Python. The glue that dominates the codebase is not between JARVIS and external CLIs; it is between JARVIS's own subsystems. Orchestrator talks to policy talks to audit-log talks to finding-engine talks to brain-graph. That internal glue is where code volume accumulates, and none of it fits the wrapper critique because none of it is wrapping anything external.</p>
+<p>The third reading is what the tool classification implies about the system's surface. If the system were in fact a thin wrapper, the shell class would dominate and the native class would be small — because a thin wrapper does little besides format arguments, shell out, and parse output. Here the opposite is true. The shell class is the smallest, the native class is the largest, and the api and db classes are comparably sized to each other. The shape of the tool surface is a system that does substantial work <em>in-process</em> and reaches out selectively, not a system whose primary mode is delegation to external binaries.</p>
+<h3 id="33-table-3-consciousness-modules-by-operational-tier">3.3 Table 3 — Consciousness modules by operational tier</h3>
+<p>The <code>consciousness/</code> directory contains 35 substantive modules (excluding <code>__init__.py</code>). They are the system's personality-adjacent subsystems — inner voice, soul engine, emotional intelligence, relationship ledger, persona drift, proactive briefing, mirror, sibling channel, and others. A dismissive summary would say "35 consciousness modules" without qualifying what that means operationally. The purpose of this table is to qualify it.</p>
+<p>I split the 35 into three tiers by reply-path effect:</p>
+<ul>
+<li><strong>Live (17 modules):</strong> the module's output is read during the assembly of a single operator reply, either in the system-prompt build phase or in a post-LLM prepend phase. Confirmed by reading the call site in <code>agents/worker.py</code> for every member of the tier.</li>
+<li><strong>Ambient (11 modules):</strong> the module runs on a schedule or subscribes to an event stream and mutates state — memory rows, soul-engine events, brain-graph edges, relationship ledger — that influences future turns, but its output is not read on any given turn.</li>
+<li><strong>Inert or conditional (7 modules):</strong> the module is gated off by a configuration flag (<code>VISION_ENABLED=False</code> is the primary case), is campfire-only and therefore outside the operator reply path, or is pure infrastructure (the scheduler itself, the shared cooldown gate) that enables other modules without producing reply-path output.</li>
+</ul>
+<p>The live tier includes <code>emotional_intelligence</code>, <code>human_layer</code>, <code>persona_drift</code>, <code>character_mode</code>, <code>session_context</code>, <code>relationship_ledger</code>, <code>soul_engine</code>, <code>social_context</code>, <code>personality_bridge</code>, <code>interruption_handler</code>, <code>inner_voice</code> (via <code>surface_pending_thoughts_to_prepend</code>), <code>proactive_voice</code>, <code>synthesis_engine</code>'s Socratic tail, and cross-sibling reads through <code>jarvis_reachy_channel</code> and <code>reachy_brain</code>. The ambient tier includes <code>mirror</code>, <code>continuous_watcher</code>, <code>operator_awareness</code>, <code>parenting_layer</code>, <code>joy_ledger</code>, <code>joy_prompt_daemon</code>, <code>self_evolution</code>, <code>proactive_briefing</code> (session-start only), <code>sibling_channel</code>, <code>time_capsule</code>, and <code>emotional_memory</code>'s write-only paths. The inert tier includes <code>screen_awareness</code> (vision currently disabled), <code>pattern_observer</code> (depends on vision events that do not fire), <code>campfire_context</code> and <code>campfire_watcher</code> (campfire-only), <code>conversation_mode</code> in its auto-triggered branch, <code>scheduler</code> (infrastructure), and <code>_shared_cooldown</code> (infrastructure).</p>
+<p>The first reading is that "35 modules" overstates what is operationally live at any moment. Seventeen modules — 48.6% — participate in any given live utterance. Eleven are doing ambient state accumulation that influences <em>later</em> utterances. Seven are either turned off or are infrastructure that supports the other two tiers without producing output themselves. Any future writing about this system should use the three-tier framing rather than the undifferentiated module count.</p>
+<p>The second reading is about the shape of "behavioral breadth." The live tier is not a shrunken version of the full layer; it is the subset that got wired into the hot reply path by design. The ambient tier is doing real work between turns — memory curation, growth tracking, cross-session pattern detection, sibling-channel exchange — and that work does reach the operator, but asynchronously, through side channels like proactive voice announcements or next-session system-prompt injection. The inert tier is the smallest and is either feature-flagged off for GPU budget reasons (vision) or is infrastructure that would need to be reclassified if the paper's axis were changed from "reaches operator per turn" to "participates in the system's operation."</p>
+<p>The third reading is honest about what this implies for the earlier papers in this sequence. Paper 2 (<em>The Ambient Intelligence Problem</em>) described the consciousness layer as a unified architectural tier. Empirically, the layer is three tiers. A more precise claim that Paper 2 v1.1 should adopt is that the layer has 17 active-per-turn modules, 11 ambient-state accumulators, and 7 currently-inert-or-conditional subsystems, and that the system's "behavioral scaffolding" is the union of the first two tiers rather than the full module count.</p>
+<h3 id="34-table-4-audit-log-by-event-type">3.4 Table 4 — Audit log by event type</h3>
+<p>The audit log is a separate SQLite database, hash-chained row-by-row, covering every action the system takes that is deemed auditable by its emission site. At snapshot time it holds 87,315 rows spanning approximately 24 days. A full breakdown of all 42 event types is in the evidence dossier; the table here is the head of the distribution plus the tail of the autonomy-decision cluster that matters for the paper's claim.</p>
+<table>
+<thead><tr>
+<th style="text-align:left">event_type</th>
+<th style="text-align:right">count</th>
+<th style="text-align:right">%</th>
+<th style="text-align:left">what triggers it</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">api_access</td>
+<td style="text-align:right">45,912</td>
+<td style="text-align:right">52.6%</td>
+<td style="text-align:left">Non-localhost FastAPI request to the bridge server (one LAN client polled <code>/api/jobs/pending</code>).</td>
+</tr>
+<tr>
+<td style="text-align:left">tool_dispatch</td>
+<td style="text-align:right">12,131</td>
+<td style="text-align:right">13.9%</td>
+<td style="text-align:left">Every tool dispatch call, logged unconditionally before the tool runs.</td>
+</tr>
+<tr>
+<td style="text-align:left">finding_cross_host_dup</td>
+<td style="text-align:right">10,623</td>
+<td style="text-align:right">12.2%</td>
+<td style="text-align:left">SmartScope/FindingEngine dropped a finding as a cross-host duplicate.</td>
+</tr>
+<tr>
+<td style="text-align:left">orchestrator_action</td>
+<td style="text-align:right">2,470</td>
+<td style="text-align:right">2.8%</td>
+<td style="text-align:left">Hunt state-machine action (recon/deep-dive/evidence/drafting).</td>
+</tr>
+<tr>
+<td style="text-align:left">finding_noise_filtered</td>
+<td style="text-align:right">1,869</td>
+<td style="text-align:right">2.1%</td>
+<td style="text-align:left">Finding dropped by false-positive sweeps.</td>
+</tr>
+<tr>
+<td style="text-align:left">finding_processed</td>
+<td style="text-align:right">1,769</td>
+<td style="text-align:right">2.0%</td>
+<td style="text-align:left">Finding passed all gates and was recorded.</td>
+</tr>
+<tr>
+<td style="text-align:left">self_eval:learn_outcome</td>
+<td style="text-align:right">1,588</td>
+<td style="text-align:right">1.8%</td>
+<td style="text-align:left">Hit/miss outcome for a completed hunt recorded.</td>
+</tr>
+<tr>
+<td style="text-align:left">self_eval:ali_feedback</td>
+<td style="text-align:right">1,588</td>
+<td style="text-align:right">1.8%</td>
+<td style="text-align:left">Operator approve/reject/dismiss feedback routed into learner.</td>
+</tr>
+<tr>
+<td style="text-align:left">scope_exclusion</td>
+<td style="text-align:right">1,453</td>
+<td style="text-align:right">1.7%</td>
+<td style="text-align:left">SmartScope rejected a candidate host at the pre-filter.</td>
+</tr>
+<tr>
+<td style="text-align:left">finding_duplicate</td>
+<td style="text-align:right">1,326</td>
+<td style="text-align:right">1.5%</td>
+<td style="text-align:left">Finding was an exact duplicate of a prior one.</td>
+</tr>
+<tr>
+<td style="text-align:left">hunt_auto_approved</td>
+<td style="text-align:right">994</td>
+<td style="text-align:right">1.1%</td>
+<td style="text-align:left">Hunt director auto-approved next action under policy gate.</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>(31 further types, each under 1%)</em></td>
+<td style="text-align:right"><em>8,592</em></td>
+<td style="text-align:right"><em>9.8%</em></td>
+<td style="text-align:left">—</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Total</strong></td>
+<td style="text-align:right"><strong>87,315</strong></td>
+<td style="text-align:right"><strong>100.0%</strong></td>
+<td style="text-align:left">42 distinct event types</td>
+</tr>
+</tbody></table>
+<p>Three event types account for 78.7% of rows: <code>api_access</code> (52.6%), <code>tool_dispatch</code> (13.9%), and <code>finding_cross_host_dup</code> (12.2%). If you sum the events that are actual autonomy decisions — <code>orchestrator_action</code>, <code>hunt_auto_approved</code>, <code>policy_decision</code>, <code>orchestrator_transition</code>, <code>hypothesis_formed</code> — they come to approximately 4,841 rows, or 5.5% of the log. Day-to-day, the system is writing roughly 500 tool dispatches, 440 cross-host-duplicate drops, 100 orchestrator actions, 40 policy decisions, and 11 hypothesis formations per day. For every one "thought" recorded, there are roughly fourteen action-surface events recorded.</p>
+<p>The first reading is that the audit log records the action surface at a per-dispatch granularity rather than selectively logging interesting decisions. Every tool call emits a <code>tool_dispatch</code> row before the tool runs, whether the tool is a passive DNS lookup or an orchestrator-initiated nuclei scan. Every cross-host duplicate drop is logged, even though no action reaches a target. The audit mechanism is proportional to the system's total activity, not to the subset of activity a designer might label as "decisions." This is the correct design for a tamper-evident record: the log is either universal or it is selectable, and a selectable log is one an adversary can game by reclassifying.</p>
+<p>The second reading is the ratio. The 14:1 ratio of scaffolding-event rows to decision-event rows in the audit log mirrors the approximate 9:1 ratio of scaffolding LOC to decision-plus-safety LOC in Table 1. The two ratios are not identical, but they tell the same story at different scales. The system spends most of its time dispatching and deduplicating, not deliberating, and the audit log reflects that activity distribution faithfully.</p>
+<p>The third reading is what the scope-gate numbers show about where gating actually happens. The log contains 1,453 <code>scope_exclusion</code> events (SmartScope dropping a candidate host before any tool runs against it) and 2 <code>scope_violation</code> events (a network tool's own scope check catching a target that somehow slipped through). The ratio is 726:1. The scope gate does almost all of its work at the SmartScope pre-filter stage; by the time a scope check reaches the network-tool layer, the target has already been vetted hundreds of times. This is a minor point that is easy to miss: serial gates with early, cheap pre-filters concentrate the work at the top, not at the bottom, and the audit log's event histogram shows which layers are doing the work.</p>
+<h2 id="4-synthesis">4. Synthesis</h2>
+<p>The four tables are four decompositions of the same system along four axes. Taken alone, none of them is decisive. The wrapper critique could be salvaged against any single table with a sufficiently determined reading — "your 6.6% is a big 6.6%," "17 modules is still a lot," "audit logs lie about what matters." Taken together, they describe a shape the critique cannot fit.</p>
+<p>Start with what the "wrapper around CLIs" framing predicts. If a local-first agent system is a thin shell over external binaries, the predictions are: most of the tool code is shell invocation; most of the non-tool code is either UI around those shells or glue to pipe their output; the behavioral surface is shallow because it is decoration around a pass-through pipeline; the audit trail, if it exists, logs decisions rather than actions, because there are fewer internal actions to log.</p>
+<p>Now read the four tables against those predictions. Table 2 contradicts the first prediction directly: 12 of 183 dispatch functions shell out, 11.2% of tool code, and the balance is original Python. Table 1 contradicts the second: the non-tool mass is distributed across persistence, orchestration, behavioral, runtime, and GUI — scaffolding around the agent, not glue around shells. Table 3 contradicts the third: the behavioral surface is 35 modules, 17 of them wired into the live reply path by design, and the ambient and inert tiers add state accumulation and conditional capability that a wrapper architecture has nowhere to put. Table 4 contradicts the fourth: the audit log records roughly 500 <code>tool_dispatch</code> events per day — every single tool call, shell or api or db or native — and 5.5% of rows are autonomy-decision events. The log is universal and action-level, not selective and decision-level.</p>
+<p>The shape the tables describe, taken together, is something like this: a hot inner loop of orchestration, policy evaluation, hypothesis formation, and tool dispatch — small, expensive per unit, and representing the <em>decisions</em> of the system — surrounded on every side by scaffolding: the tools themselves (17,430 LOC), the persistence and memory layers (7,448 LOC), the runtime daemons that keep state coherent (15,713 LOC), the behavioral layer that shapes how the system presents (17,185 LOC), the voice pipeline that gives it a mouth (9,032 LOC), and the GUI that lets an operator see it (42,205 LOC). The hot loop and its direct safety perimeter together are under 25% of the codebase. The scaffolding is everything else.</p>
+<p>The generalizable observation from this shape is a ratio, not a specific number. In the LOC axis the ratio of scaffolding to decision-plus-safety sits around 9:1; in the audit-event axis it sits around 14:1; in the tool-wrapper-class axis the non-shell fraction is roughly 9:1 against the shell fraction. These are three independent decompositions, and they all land in the same order of magnitude. The hypothesis I take from the coincidence is that <em>local-first agent systems at scale invest roughly an order of magnitude more effort into scaffolding than into the hot decision loop</em>, and that this ratio is a property of the local-first setting rather than of a particular builder's choices. Cloud-native agent systems can rent scaffolding — hosted databases, managed UI frameworks, SaaS audit platforms, externally-maintained tool catalogs — and they will show a different ratio because much of the scaffolding does not appear in their repository. A local-first system, by definition, owns its own scaffolding, and the scaffolding mass is what you see when you count.</p>
+<p>That reframing has a consequence for how agent systems are dismissed. The "wrapper around CLIs" framing locates the work in the wrong place. It assumes the agent is the hot loop plus the shell-outs, and that the rest of the code is decoration. The tables show the opposite: the hot loop plus the shell-outs are the smallest visible slice of the system, and the rest is the infrastructure that makes the hot loop operable for a single operator over continuous sessions. A builder who does not invest in the scaffolding does not produce a leaner agent; they produce a brittle one. A critic who does not count the scaffolding does not see a simpler system; they see a system whose complexity is hidden from them by the axis of their measurement.</p>
+<p>None of this makes the scaffolding automatically <em>good</em>. A system with 248,809 lines of Python can be elegant or sprawling, well-tested or under-tested, clear or impenetrable. The tables do not speak to those questions. They speak to a narrower question: whether the system is a thin wrapper. It is not.</p>
+<h2 id="5-discussion">5. Discussion</h2>
+<p>The paper's claim is narrow; its generalization is narrower still. I want to be explicit about what the tables do and do not support beyond the specific case.</p>
+<p><strong>What they support.</strong> They support the existence claim: a single-operator, local-first agent system at the 248K-LOC scale can decompose along these four axes and produce these four distributions. That is not a population statement; it is a proof by instance. They also support the weaker generalization: the "wrapper around CLIs" framing does not fit this instance. A critic holding that framing has to show which axis of the critique the tables have missed, not repeat the critique against the summary.</p>
+<p><strong>What they do not support.</strong> They do not support claims about other builders' systems. A 30K-LOC local-first agent would have different ratios and a different shape. They do not support claims about cloud-native agents, where scaffolding is rented and therefore off-ledger. They do not support quality claims: the LOC distribution is silent on whether the code is well-structured, tested, or maintainable. They do not support productivity claims: the 37-day build is not offered as a benchmark, and the "one operator" framing is not a prescription.</p>
+<p><strong>What replication would need.</strong> A more general version of this paper would audit N&gt;1 local-first agent systems along the same four axes and report the ratios across them. The candidates I would want to see audited include Tabby (local coding assistant), Continue (local coding agent), Superagent (local autonomous agent framework), and the cluster of local-llm-function-calling stacks that have emerged in the past year. For each, the method is: physical-LOC count by bucket; tool dispatch enumeration with shell/api/db/native classification; behavioral-layer tier analysis if a behavioral layer exists; audit or event-log histogram over a comparable window. The prediction I would carry into that study is that the scaffolding-to-decision ratio sits in the 5:1 to 20:1 range for systems over ~50K LOC. A ratio significantly outside that range — either a system that is overwhelmingly shell wrappers, or one that is overwhelmingly pure hot-loop code with no scaffolding — would be evidence against the generalization.</p>
+<p><strong>What would disprove the thesis.</strong> The thesis is falsifiable in at least three ways. First, an audit of several local-first agent systems that shows shell-wrapper code dominating the tool surface in systems at comparable scale would directly contradict Table 2's generalization. Second, an audit that shows an equivalent system performing comparably without a scaffolding layer — no persistence, no runtime daemons, no behavioral tier — would contradict Tables 1 and 3's generalization. Third, an audit log from another system that shows the decision/action-event ratio approaching 1:1 rather than clustering near 1:14 would contradict Table 4's generalization. Any of these would weaken the paper's framing and deserve a revision. I invite them.</p>
+<p><strong>What is open.</strong> The tier distinction in Table 3 applies to a behavioral layer that is itself a design choice rather than a necessity of the architecture. Agent systems that do not maintain ambient state between turns — simpler, statelier chat-agent architectures — would not have a Table 3 at all, because they would have no ambient tier to measure. Whether the ambient tier is load-bearing for operator experience, or whether it is overbuilt in this specific instance, is a question the paper does not answer. <a href="paper_03_dario.html">The third paper in this sequence</a> treats the operator-side consequences of running such a system; the load-bearing question for this paper is only whether the layer exists and how much of it operates per turn.</p>
+<p><strong>What this means for builders.</strong> The practical advice this paper supports is thin but specific. If you are budgeting an agent system as "model plus tools," you are budgeting approximately 22% of what will ship. The other 78% is persistence, orchestration, runtime coordination, behavioral scaffolding, voice or UI, and tests. The 78% is not discretionary and will not wait. A common failure mode of new agent projects is shipping the 22% and discovering the 78% as emergency work mid-operation. The correction is to allocate attention to the scaffolding at the architectural-decision stage, not at the demo-next-week stage.</p>
+<h2 id="6-related-work">6. Related work</h2>
+<p>The question of what a system's size means is older than AI. <strong>Thomas McCabe's cyclomatic complexity</strong> (1976) and <strong>Maurice Halstead's software science</strong> (1977) are the canonical answers to <em>what counts</em> when you count code. Both were proposed as proxies for cognitive complexity and tested against defect-density and maintenance-cost outcomes. Both have known limits: complexity proxies do not capture architectural modularity, and lines of code as a crude measure was famously pilloried as "measuring the weight of a building to assess its structural quality." I use physical LOC here not as a complexity proxy but as a mass measurement — the question is where code lives, not how hard it is to understand — and I acknowledge upstream that any complexity conclusion drawn from this paper's numbers would be overreach.</p>
+<p><strong>Barry Boehm's COCOMO model</strong> (1981) and its descendants take the inverse question: given size, what does it cost to produce? COCOMO's constants are tuned on commercial software projects, not on single-operator research builds, and the effort estimate for 248K LOC under COCOMO's basic model would be a small team working for a year or more — an estimate the 37-day build plainly contradicts. The interpretation I offer is not that the model is wrong; it is that single-operator AI-assisted builds sit outside COCOMO's training distribution. Paper 4's numbers are a data point from outside that distribution, not a refutation inside it.</p>
+<p><strong>Benchmark work on agent capability</strong> — WebArena (Zhou et al., 2024), SWE-bench (Jimenez et al., 2024), OSWorld (Xie et al., 2024) — treats agent systems from the outside, measuring task success rates against held-out suites. The inside view this paper offers is orthogonal: benchmarks measure what an agent can do; the decomposition measures what the agent is made of. A system can score well on a benchmark and still be a thin wrapper; a system can score poorly on a benchmark and still have a rich internal structure. The two axes are independent, and the wrapper critique lives on the internal axis. I cite the external-benchmark literature here because it is the closest existing body of work on agent systems, and because the internal axis has been under-attended relative to the external one.</p>
+<p><strong>The specific "wrapper" critique</strong> has been made publicly in several forms. The most common version is the dismissal of agent systems built on top of existing security CLIs as repackaging rather than engineering. I searched for the critique in published form and did not find a version prominent enough to cite as representative. The framing circulates in security-practitioner conversation without a canonical written source, which is itself a note about the state of the discourse: the dismissal is common enough to be an intellectual headwind for builders in the space, but diffuse enough that no single author carries it. This paper responds to the framing as it exists rather than to any particular statement of it.</p>
+<p><strong>Published work on single-operator software development at scale</strong> is sparse. Fabien Sanglard's deep-dive reconstruction work (on Doom, Wolfenstein 3D, Quake) is an adjacent genre but reverses the arrow — he audits finished systems; this paper audits a system under development. The closest analog I have found is the literature on solo-founder software-as-a-service operations (for example, the <em>Software Engineering at Google</em> book's chapter on team size versus code quality, or DHH's writing on the Basecamp stack), but those are operational rather than architectural and do not decompose by the four axes used here.</p>
+<h2 id="7-limitations">7. Limitations</h2>
+<p>I list these explicitly rather than softening them, because a decomposition paper whose limitations are hedged is a paper whose numbers should not be trusted. The five items below are reproduced from the evidence-dossier review and are meant to be read as features of the method, not concessions.</p>
+<ol>
+<li><strong>Sample size: N = 1.</strong> One operator (Ali Hassan Assi), one workstation, one local-first architecture, 37 days of continuous development. Ratios and absolute numbers should be read as an existence proof that a local-first agent can decompose this way, not as population statistics. Generalization beyond this setting is open, and the disproof conditions are spelled out in §5.</li>
+<li><strong>Methodology is heuristic.</strong> Category assignment to buckets in Table 1 is manual, guided by directory name and per-file responsibility, and could shift by one to three percentage points under a different rubric. Shell-wrapper detection in Table 2 is surface-level regex against dispatch-function bodies and could miss a wrapper that routes through a helper import; manual review of the 12 shell-flagged tools confirmed zero false positives, but false negatives cannot be ruled out without deeper call-graph analysis. LOC counts include blank lines, comments, and docstrings; statement-only counts would drop totals by roughly 15–20% uniformly. Tool-schema counts (258) diverge from dispatch-function counts (183) because some schemas are served by inline handlers in <code>registry.py</code> that do not have a standalone <code>tool_*</code> function; the 75-function gap is documented but not individually enumerated in this paper.</li>
+<li><strong>No git history.</strong> The project was not under version control during the snapshot period. Commit cadence, regression history, and authorship timeline cannot be reconstructed from repository artifacts. This is a real limitation for establishing the 37-day build timeline empirically; the timeline given in this paper derives from file modification timestamps, audit-log first-seen dates, and the author's session records. Future development initiates a git repository; this manuscript and the evidence dossier serve as the t=0 reference point for that history.</li>
+<li><strong>Snapshot date.</strong> 2026-04-22 for the physical-LOC and tool-enumeration numbers; 2026-04-22 16:10:28Z for the audit-log tail. The codebase is actively developed, and totals can shift by fractions of a percent within days. A re-snapshot on publication morning is part of the release procedure; bucket ratios and the four claims are stable across the 12-hour window between the evidence-dossier audit and this manuscript's draft.</li>
+<li><strong>Self-reporting bias on operator-side observations.</strong> The consciousness-layer tiering in Table 3 rests on manual call-site verification in <code>agents/worker.py</code>, which is subject to the author's reading of the code. The classification has been cross-checked against the audit log's read-path events where they exist, but some modules (notably the inert tier) have no runtime signal available and are classified on the basis of their configuration gates and intended role. An external auditor might shift two or three modules across the live/ambient boundary without changing the paper's headline claim.</li>
+</ol>
+<h2 id="8-conclusion">8. Conclusion</h2>
+<p>The wrapper framing predicts a shape that the four tables do not produce. The actual shape is a small hot loop of orchestration, policy, hypothesis, and tool dispatch, embedded in a much larger mass of scaffolding — persistence, runtime daemons, behavioral layer, voice pipeline, GUI, and tests. Across three independent axes (LOC distribution, tool dispatch classification, audit-event histogram), the scaffolding-to-decision ratio sits in the same order of magnitude, roughly 9:1 to 14:1. A fourth axis (consciousness-layer tiering) adds a distinction the wrapper framing has nowhere to put: behavioral modules come in three operational grades, and only about half reach the operator on any given turn.</p>
+<p>What the decomposition method offers is a cheap empirical check against dismissals. Before accepting or rejecting a claim about what an agent system is, count. The count is not an argument about quality. It is a shape, and the shape is what the dismissal either fits or fails to fit.</p>
+<p>What it does not offer is a quality verdict, a performance claim, or a prescription. The next paper in this sequence, if one is written, would take one of these four axes — most likely the ambient-state tier of the behavioral layer — and investigate whether it is load-bearing for operator experience or over-engineered for a single-operator setting. That is a question the tables cannot answer. But they can say, honestly and reproducibly, that the layer exists and that roughly eleven modules of it are doing work between turns.</p>
+<p>Write the evidence before writing the defense. The defense, once the evidence is in, can be short.</p>
+        </article>
+        <footer class="paper-footer">
+            <p>Correspondence: <a href="mailto:contact@alihasanassi.com">contact@alihasanassi.com</a>. Updates: <a href="/research/">alihasanassi.com/research</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>

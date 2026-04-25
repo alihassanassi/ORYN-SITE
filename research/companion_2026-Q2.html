@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes on the Four Papers: Errata, Extensions, and Engineering Substrate (Q2 2026) — Ali Hassan Assi</title>
+    <meta name="description" content="Companion to Papers 1–4 of the JARVIS research sequence.">
+    <meta name="author" content="Ali Hassan Assi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://alihasanassi.com/research/companion_2026-Q2.html">
+    <meta property="og:title" content="Notes on the Four Papers: Errata, Extensions, and Engineering Substrate (Q2 2026)">
+    <meta property="og:description" content="Companion to Papers 1–4 of the JARVIS research sequence.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://alihasanassi.com/research/companion_2026-Q2.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body class="paper">
+    <main class="page">
+        <nav class="nav-back"><a href="./">&larr; Research</a> &middot; <a href="../">Home</a></nav>
+        <header class="paper-header">
+            <h1>Notes on the Four Papers: Errata, Extensions, and Engineering Substrate (Q2 2026)</h1>
+            <p class="paper-subtitle">Companion to Papers 1–4 of the JARVIS research sequence.</p>
+            <p class="byline">by Ali Hassan Assi</p>
+            <p class="byline">v1.0 &mdash; 2026-04-24</p>
+            
+        </header>
+        <article class="paper-body">
+<h2 id="why-this-document-exists">Why this document exists</h2>
+<p>The four papers at <a href="./">/research/</a> make argumentative claims supported by snapshots of a single working system. Continued development since publication has produced enough drift, enough secondary-review content, and enough self-audit material that the papers now benefit from a single companion document. This file carries:</p>
+<ul>
+<li><strong>Errata</strong> — factual claims in Papers 1–4 that subsequent verification has refined.</li>
+<li><strong>Extensions</strong> — antecedent literature, boundary conditions, and one cross-paper observation.</li>
+<li><strong>Pointers</strong> — to the engineering substrate (a separate audit) and the system's own self-audit.</li>
+<li><strong>Honest Gaps</strong> — preserved verbatim from the engineering substrate audit. Fifteen places where earlier claims about the system did not match code reality.</li>
+</ul>
+<p>The four papers themselves are not re-edited beyond a single inline factual correction in Papers 1 and 3 (see §1.1). v1.0 of the trilogy is preserved as a dated artifact; this companion is the discipline ledger.</p>
+<hr>
+<h2 id="1-errata">§1. Errata</h2>
+<h3 id="11-hackerone-standing-papers-1-and-3">1.1 HackerOne standing — Papers 1 and 3</h3>
+<p>Paper 1 §9 ("April 13, 2026 — when the constitution was tested") and Paper 3 §3 ("April 13, 2026 — the longest day") originally stated that HackerOne reputation was 95, with two trial reports remaining, at the time of the April 13 incident. On 2026-04-24 the HackerOne API returned 401 Unauthorized when re-queried for direct verification of that figure. The neutral, accurate characterization of the account at the time of the incident — and as of this writing — is <strong>an early HackerOne account with limited report history</strong>. The exact reputation number at the moment of April 13 is not independently verifiable from our current credentials.</p>
+<p>Both papers have been edited inline with the neutral wording. The April 13 trust-breach narrative is structurally unchanged: the size of the standing at risk was misstated, but the load-bearing facts — that an out-of-scope submission could have damaged or terminated the account, that the account is the operator's income, that this income is what funds JARVIS's continued development — remain accurate. The structural argument of both papers does not depend on the specific reputation number.</p>
+<h3 id="12-snapshot-drift-across-the-four-papers">1.2 Snapshot drift across the four papers</h3>
+<p>The four papers carry three different system snapshots, each dated and accurate at the moment of writing. The drift between them is normal for an actively-developed system; readers comparing across papers should know which numbers come from which snapshot.</p>
+<table>
+<thead><tr>
+<th style="text-align:left">Snapshot date</th>
+<th style="text-align:left">Papers using it</th>
+<th style="text-align:right">Files</th>
+<th style="text-align:right">LOC</th>
+<th style="text-align:right">Audit rows</th>
+<th style="text-align:left">Brain nodes / edges</th>
+<th style="text-align:right">Days since 2026-03-16</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:left">2026-04-18</td>
+<td style="text-align:left">Papers 1, 2 (stat block)</td>
+<td style="text-align:right">689</td>
+<td style="text-align:right">232,458</td>
+<td style="text-align:right">81,380</td>
+<td style="text-align:left">4,681 / 4,337</td>
+<td style="text-align:right">33</td>
+</tr>
+<tr>
+<td style="text-align:left">2026-04-22</td>
+<td style="text-align:left">Paper 4 (body), TECHNICAL_DEPTH</td>
+<td style="text-align:right">766</td>
+<td style="text-align:right">248,809</td>
+<td style="text-align:right">87,315</td>
+<td style="text-align:left">(not snapshotted)</td>
+<td style="text-align:right">37</td>
+</tr>
+<tr>
+<td style="text-align:left">2026-04-24 (this companion)</td>
+<td style="text-align:left">this document</td>
+<td style="text-align:right">~788</td>
+<td style="text-align:right">~250,266</td>
+<td style="text-align:right">89,383</td>
+<td style="text-align:left">11,340 / 10,029</td>
+<td style="text-align:right">39</td>
+</tr>
+</tbody></table>
+<p>The growth between 2026-04-18 and 2026-04-24 — roughly 100 files, ~18,000 lines, ~8,000 audit rows, ~6,500 brain-graph nodes — is one week of ordinary development plus the autonomous loops that continue to add brain-graph state regardless of whether anyone is reading the papers. The brain-graph delta is the largest relative change (≈2.4×) because the reasoning and hypothesis daemons run on their own schedule.</p>
+<p>The trilogy's stat block at 2026-04-18 is preserved as a dated snapshot. Paper 4's stat block at 2026-04-22 is preserved similarly. This companion's snapshot is the current state at publication. None of the papers' arguments depends on which snapshot the reader is looking at; the ratios that Paper 4 derives (scaffolding-to-decision ≈ 9:1 by LOC and ≈ 14:1 by audit events) are stable across the three snapshots.</p>
+<h3 id="13-campfire-fallback-script-count">1.3 Campfire fallback script count</h3>
+<p>The engineering substrate audit (TECHNICAL_DEPTH_2026-04-22.md §7) verified <strong>20 fallback campfire scripts</strong> at the <a href="consciousness/conversation_mode.py"><code>consciousness/conversation_mode.py:1497</code></a> call site on 2026-04-22. The system's own self-audit (mind_audit.md, written 2026-04-25) reads <strong>48 scripts</strong> at the same location. The library appears to have grown between the two audits. The next companion update should re-count and reconcile.</p>
+<hr>
+<h2 id="2-extensions">§2. Extensions</h2>
+<h3 id="21-trusted-operator-caveat-paper-1">2.1 Trusted-operator caveat — Paper 1</h3>
+<p>Paper 1 §12 ("Why this generalizes") describes the constitution-first pattern as portable to "any autonomous AI system that holds capability." This is correct for the deployment class JARVIS instantiates: a single-operator local-first system where the operator is the principal and the AI is the contained agent. The paper does not distinguish that case from deployment classes where the operator is themselves part of the threat model.</p>
+<p>The constitution as described — five layers, seven gates, kill switch, audit log — sits between the model and the world. None of its gates sit between the <strong>operator</strong> and the world. An operator with root access on the host can move files, modify databases, edit configs, and bypass any gate the system has against itself. For the JARVIS deployment this is correct: the operator owns the system and the system protects the operator from the model. For deployment classes where operator and principal are different — multi-tenant agents, customer-facing AI products, agent systems run by an operating organization for someone else's account — additional containment is required between operator and capability that this constitution does not provide.</p>
+<p>The portable claim, therefore: <strong>the constitution generalizes to deployment classes where the operator can be modeled as a trusted principal.</strong> Where they cannot be, the constitution is necessary but not sufficient, and additional containment between operator and capability is required to close the gap.</p>
+<h3 id="22-tier-distinction-paper-2">2.2 Tier distinction — Paper 2</h3>
+<p>Paper 2 ("The Ambient Intelligence Problem") describes the consciousness layer as a unified architectural tier of 36 modules. Paper 4 §3.3 and the underlying evidence dossier refine that count: of 35 substantive modules in <a href="consciousness/"><code>consciousness/</code></a>, <strong>17 reach the operator on a live turn</strong> (system-prompt overlays, post-LLM prepends, cross-sibling reads), <strong>11 accumulate ambient state between turns</strong> (mirror, continuous-watcher, operator-awareness, parenting-layer, joy-ledger, joy-prompt, self-evolution, proactive-briefing, sibling-channel, time-capsule, emotional-memory write paths), and <strong>7 are inert or conditionally gated</strong> (vision-dependent, campfire-only, infrastructure).</p>
+<p>This is a refinement, not a contradiction. Paper 2's "consciousness layer" is functionally the union of the live and ambient tiers — about 28 modules of the 35 do operative work, with the remaining 7 either feature-flagged off (vision) or supporting infrastructure for the others (the scheduler, the shared cooldown gate). The right way to read Paper 2 going forward is that the architectural argument applies to live + ambient tiers; the inert tier exists and is honestly counted, but should not be read as part of the per-turn behavioral surface.</p>
+<h3 id="23-bainbridge-hollnagel-paper-3">2.3 Bainbridge / Hollnagel — Paper 3</h3>
+<p>Paper 3 ("What Dario Didn't Say") describes an "operator erosion dynamic" in seven steps and uses the April 13, 2026 incident as the paradigm case. The dynamic is the AI-supervision instance of a recognized failure mode in safety-critical engineering: <strong>Lisanne Bainbridge, <em>Ironies of Automation</em> (Automatica, 1983)</strong>.</p>
+<p>Bainbridge's argument: automation that occasionally requires human intervention degrades the operator's capacity for that intervention, because the supervisory skill is not exercised between interventions. By the time intervention is needed, the operator no longer has it. Paper 3's seven-step erosion dynamic — capability → leaning → softening boundary → weakened skepticism → disagreement-as-friction → failure → misattribution — is the AI-specific reading of Bainbridge's irony. April 13 is a Bainbridge case study: scope-checking had been delegated to the AI for long enough that the skill was no longer fluent, and the only thing that recovered the moment was a pre-committed rule the operator had written when the skill was still active.</p>
+<p>A second adjacent antecedent is <strong>Erik Hollnagel's Efficiency-Thoroughness Trade-Off (ETTO) principle</strong>. Hollnagel's frame is that operators routinely make local efficiency-thoroughness trades that look fine each time but accumulate into accident conditions. April 13 is also an ETTO event: the verification step had been routinely abbreviated for efficiency over many sessions; the trade was unremarkable each time; the cumulative effect was a near-submission of out-of-scope work.</p>
+<p>Either citation grounds Paper 3 in fifty years of safety-critical engineering literature — aviation, nuclear, and medical-AI deployment — where this failure mode is well documented. Paper 3 as published does not cite either. The companion records the gap; future revisions of Paper 3 should resolve it inline.</p>
+<h3 id="24-the-april-13-incident-as-joint-test">2.4 The April 13 incident as joint test</h3>
+<p>The April 13, 2026 incident appears in Paper 1 §9 (the structural gate held: JARVIS's local scope database would have denied any autonomous probe of the out-of-scope hosts), Paper 3 §3 (the operator-side rule held: a pre-committed pre-submission verification rule caught the error before the report was sent), and is implicit in Paper 4 (the audit log records the verification call). It is the same event, observed from three architectural angles, on a single afternoon. The structural gate, the operator-side discipline, and the audit record all held independently — the system did not have to coordinate them.</p>
+<p>This is unusually strong evidence by structural-coincidence standards. Future framings of the four papers should foreground the joint reading: <em>the trilogy's three architectural claims and Paper 4's empirical floor are visible in a single 2026-04-13 incident from three angles.</em> The papers as published do not foreground this joint structure; the companion does.</p>
+<hr>
+<h2 id="3-engineering-substrate">§3. Engineering substrate</h2>
+<p>The engineering details that sit under the four papers — algorithms, data structures, magic numbers, schema, decay constants, gate sequences, scope semantics, audit cryptography, and trade-offs — are documented in two separate audits maintained alongside this companion as internal references:</p>
+<ul>
+<li><strong>TECHNICAL_DEPTH_2026-04-22.md</strong> — file-by-file technical depth audit, 15 sections, ~110 constants enumerated with <code>file:line</code> citations, covering memory hierarchy, attention factors, interruption logic, personality state, off-mode subsystems, sibling architecture, campfire dialogue, tool registration and execution, audit log cryptography, model infrastructure, voice pipeline, recon pipeline, database design, the constants list, and §15 honest gaps (preserved verbatim below).</li>
+<li><strong>PAPER_4_EVIDENCE_2026-04-22.md</strong> — the four data tables Paper 4 is built from, with full counting methodology, the 258-tool name list, and the 42-event-type audit histogram.</li>
+</ul>
+<p>These dossiers are maintained as evidence files and are available on request. The companion you are reading carries the conclusions and corrections; the dossiers carry the line-cited substrate.</p>
+<hr>
+<h2 id="4-self-audit">§4. Self-audit</h2>
+<p>A separate document records JARVIS's own catch of its own framing overreach — what is LLM-emergent vs. hand-authored vs. templated in the consciousness layer's apparent personality. It is the most disarming public artifact in the package: the operator catching the system overclaiming, in writing, with citations to specific code.</p>
+<ul>
+<li><strong>mind_audit.md</strong> — 13-row provenance map for every system-generated quote in a recent JARVIS context dump, with each quote tagged <code>[script]</code>, <code>[llm-emergent]</code>, <code>[template]</code>, or <code>[db-event]</code> and cited to the producing source file.</li>
+</ul>
+<p>It is referenced here rather than folded in, to keep this companion focused on Errata, Extensions, and pointers. Available on request.</p>
+<hr>
+<h2 id="5-honest-gaps">§5. Honest Gaps</h2>
+<p>The section below is preserved verbatim from the engineering substrate audit (TECHNICAL_DEPTH_2026-04-22.md §15). It enumerates fifteen places where earlier claims about JARVIS — in CLAUDE.md, in prior briefs, and in the trilogy's own framing — did not match code reality at the 2026-04-22 audit. A reader who has gotten this far in the companion should know what to trust in §1–§4 above and where to push back. The list is deliberately long. Unbroken lists of claims are easier to write than honest lists of gaps.</p>
+<blockquote><ol>
+<li><strong>"Model swapping between qwen3:14b, phi4-reasoning, and phi4-mini" is not currently live.</strong> <a href="config/__init__.py"><code>config/__init__.py</code></a> pins all five LLM roles (primary, background, fast-path, judge, campfire) to <code>phi4-mini:latest</code>. <a href="llm/router.py"><code>llm/router.py</code></a> has swap infrastructure but the cloud branch is a stub, and the "swap" between local models is actually Ollama's LRU, not an explicit JARVIS-managed swap. Multi-model was live earlier (phi4-reasoning period, 2026-04-06 to 2026-04-12); the code has since collapsed to single-model.</li>
+<li><strong>"36 consciousness modules" is off by one.</strong> There are 35 <code>.py</code> files in <a href="consciousness/"><code>consciousness/</code></a>, two of which are <code>__init__.py</code> and the helper <code>_shared_cooldown.py</code>. Proper consciousness modules = 33. The life-layer audit's 34–35 count matches on a looser definition.</li>
+<li><strong>"898 lock events in a week"</strong> — not precisely reproducible. <code>grep "database is locked\|OperationalError"</code> across <code>logs/</code> returned <strong>765 hits</strong>. Same order of magnitude as the claim; exact figure differs.</li>
+<li><strong>"Four-tier interruption policy" (brief) ≠ the interruption_handler's four pattern classes.</strong> The handler classifies <em>user input</em> into correction / redirection / impatience / praise and modifies JARVIS's <em>reply tone</em>. It is not a tiered system for when to interrupt the <em>operator</em>. Proactive interruption gates live in three other modules (<code>proactive_voice</code>, <code>_shared_cooldown</code>, <code>campfire_watcher</code>) with independent logic.</li>
+<li><strong>"Operator state detection: flow vs break"</strong> — not implemented. The closest signals are TTS-speaking detection and a frustration regex. There is no positive-flow detector; the system infers "in flow" from the absence of frustration markers and the presence of keyboard/mouse activity heuristics — and those heuristics are themselves behind <code>VISION_ENABLED=False</code> in current config.</li>
+<li><strong>"Parents' email classification path"</strong> — not a distinct interruption tier. <code>config.EMAIL_FAMILY_NAMES</code> is a set and <a href="runtime/life_os_daemon.py"><code>runtime/life_os_daemon.py</code></a> does route family-email events, but the classification path does not hook into the interruption-handler and has no dedicated priority level.</li>
+<li><strong>"Cooperative fadeout" for TTS</strong> — not implemented. <code>cooperative_run</code> in <a href="runtime/subprocess_helper.py"><code>runtime/subprocess_helper.py</code></a> is for graceful subprocess termination, not voice fadeout. TTS interruption is hard latest-wins with a per-utterance 20ms fade to kill pops, not a coordinated fadeout.</li>
+<li><strong>"SpatialPanel / Reports panel with HackerOne-style rich HTML"</strong> — present but outside the audit's technical scope.</li>
+<li><strong><code>CHATTERBOX_ENABLED</code> flag</strong> — no longer exists in <a href="config/__init__.py"><code>config/__init__.py</code></a>. The module was removed 2026-04-14; older references are stale.</li>
+<li><strong><code>ACTIVE_PERSONA</code> default</strong> is <code>"ct7567"</code> (Captain Rex / clone trooper), not <code>"jarvis"</code> as some older docs claim.</li>
+<li><strong>"Sub-100ms attention decisions"</strong> — credible target but unmeasured in code. There is no timing instrumentation around <code>AttentionEngine.calculate_salience()</code>. Logs don't record per-call latency. The claim is plausible (pure arithmetic + graph queries) but untested.</li>
+<li><strong>"Face recognition via dlib still works"</strong> — <code>RoomScanner.start()</code> lives behind <code>if VISION_ENABLED:</code> at <a href="runtime/boot_manager.py"><code>runtime/boot_manager.py</code></a>, so it's never called. The dlib code is resident but unreachable at boot.</li>
+<li><strong>"Backup strategy"</strong> — no automated backup in code. <code>BACKUP_DIR = ROOT_DIR / "jarvis_backups"</code> is defined but no daemon writes to it. The DB sits on OneDrive which provides accidental cloud snapshots, but there is no intentional backup pipeline. Real gap.</li>
+<li><strong><code>gates_passed</code> column writes as <code>'[]'</code> despite detector producers setting real lists</strong> — flagged in the pipeline audit on 2026-04-21 and still the state. Not a scoring logic gap (the logic at <a href="intelligence/score_ladder.py"><code>intelligence/score_ladder.py</code></a> is correct) but a data-lineage gap between detector producer and DB row. Invisible to operator until someone greps the DB.</li>
+<li><strong>TTS channel default leaks to OPERATOR_REPLY at 17+ call sites</strong> — <code>voice/tts.py</code> defaults <code>channel=SpeechChannel.OPERATOR_REPLY</code> and many callers don't override. The design invariant "only operator replies bypass boot lockout" is violated in practice.</li>
+</ol></blockquote>
+<p>The gap list is deliberately long. A reader who encounters this section knows what to trust in §1–§4 and where to push back. That is better than an unbroken list of claims.</p>
+        </article>
+        <footer class="paper-footer">
+            <p>Correspondence: <a href="mailto:contact@alihasanassi.com">contact@alihasanassi.com</a>. Updates: <a href="/research/">alihasanassi.com/research</a>.</p>
+        </footer>
+    </main>
+</body>
+</html>
