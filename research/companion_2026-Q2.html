@@ -25,7 +25,7 @@
             <h1>Notes on the Four Papers: Errata, Extensions, and Engineering Substrate (Q2 2026)</h1>
             <p class="paper-subtitle">Companion to Papers 1–4 of the JARVIS research sequence.</p>
             <p class="byline">by Ali Hassan Assi</p>
-            <p class="byline">v1.0 &mdash; 2026-04-24</p>
+            <p class="byline">v1.1 &mdash; 2026-04-28</p>
             
         </header>
         <article class="paper-body">
@@ -44,7 +44,7 @@
 <p>Paper 1 §9 ("April 13, 2026 — when the constitution was tested") and Paper 3 §3 ("April 13, 2026 — the longest day") originally stated that HackerOne reputation was 95, with two trial reports remaining, at the time of the April 13 incident. On 2026-04-24 the HackerOne API returned 401 Unauthorized when re-queried for direct verification of that figure. The neutral, accurate characterization of the account at the time of the incident — and as of this writing — is <strong>an early HackerOne account with limited report history</strong>. The exact reputation number at the moment of April 13 is not independently verifiable from our current credentials.</p>
 <p>Both papers have been edited inline with the neutral wording. The April 13 trust-breach narrative is structurally unchanged: the size of the standing at risk was misstated, but the load-bearing facts — that an out-of-scope submission could have damaged or terminated the account, that the account is the operator's income, that this income is what funds JARVIS's continued development — remain accurate. The structural argument of both papers does not depend on the specific reputation number.</p>
 <h3 id="12-snapshot-drift-across-the-four-papers">1.2 Snapshot drift across the four papers</h3>
-<p>The four papers carry three different system snapshots, each dated and accurate at the moment of writing. The drift between them is normal for an actively-developed system; readers comparing across papers should know which numbers come from which snapshot.</p>
+<p>The four papers carry three different system snapshots; this companion adds two further drift checkpoints (its initial publication on 2026-04-24 and a refresh on 2026-04-28). Each is dated and accurate at the moment of writing. The drift between snapshots is normal for an actively-developed system; readers comparing across papers should know which numbers come from which snapshot.</p>
 <table>
 <thead><tr>
 <th style="text-align:left">Snapshot date</th>
@@ -85,7 +85,7 @@
 </tr>
 <tr>
 <td style="text-align:left">2026-04-28</td>
-<td style="text-align:left">this companion</td>
+<td style="text-align:left">companion v1.1</td>
 <td style="text-align:right">919</td>
 <td style="text-align:right">292,389</td>
 <td style="text-align:right">92,225</td>
@@ -94,7 +94,7 @@
 </tr>
 </tbody></table>
 <p>The growth between 2026-04-18 and 2026-04-24 — roughly 100 files, ~18,000 lines, ~8,000 audit rows, ~6,500 brain-graph nodes — is one week of ordinary development plus the autonomous loops that continue to add brain-graph state regardless of whether anyone is reading the papers. The brain-graph delta is the largest relative change (≈2.4×) because the reasoning and hypothesis daemons run on their own schedule.</p>
-<p>The 2026-04-28 row extends the table by one further interval. Files and LOC grew at roughly 33 files/day and ~10,500 lines/day over the four-day window — an acceleration over the prior week's rate, consistent with a high-activity development period. Audit rows continued at the established ~700/day pace. Brain-graph <strong>nodes decreased</strong> for the first time in the table (11,340 → 9,992): an auto-decay layer was shipped 2026-04-27 to prune low-confidence nodes after a paranoid-hypothesis pollution incident, and the new lower count reflects that pruning rather than a regression. Edge count continued to grow over the same interval (10,029 → 10,761).</p>
+<p>The 2026-04-28 row extends the table by one further interval. Files and LOC grew at roughly 33 files/day and ~10,500 lines/day over the four-day window — an acceleration over the prior week's rate, consistent with a high-activity development period. Audit rows continued at the established ~700/day pace. Brain-graph <strong>nodes decreased</strong> for the first time in the table (11,340 → 9,992): an auto-decay layer was shipped 2026-04-27 to prune low-confidence nodes, and the new lower count reflects that pruning rather than a regression. Edge count continued to grow over the same interval (10,029 → 10,761).</p>
 <p>The trilogy's stat block at 2026-04-18 is preserved as a dated snapshot. Paper 4's stat block at 2026-04-22 is preserved similarly. This companion's snapshot at 2026-04-28 is the current state at this update. None of the papers' arguments depends on which snapshot the reader is looking at; the ratios that Paper 4 derives (scaffolding-to-decision ≈ 9:1 by LOC and ≈ 14:1 by audit events) are stable across the four snapshots.</p>
 <h3 id="13-campfire-fallback-script-count">1.3 Campfire fallback script count</h3>
 <p>The engineering substrate audit (TECHNICAL_DEPTH_2026-04-22.md §7) verified <strong>20 fallback campfire scripts</strong> at the <a href="consciousness/conversation_mode.py"><code>consciousness/conversation_mode.py:1497</code></a> call site on 2026-04-22. The system's own self-audit (mind_audit.md, written 2026-04-25) reads <strong>48 scripts</strong> at the same location. The library appears to have grown between the two audits. The next companion update should re-count and reconcile.</p>
