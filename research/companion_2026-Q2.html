@@ -75,17 +75,27 @@
 <td style="text-align:right">37</td>
 </tr>
 <tr>
-<td style="text-align:left">2026-04-24 (this companion)</td>
-<td style="text-align:left">this document</td>
+<td style="text-align:left">2026-04-24</td>
+<td style="text-align:left">companion v1.0</td>
 <td style="text-align:right">~788</td>
 <td style="text-align:right">~250,266</td>
 <td style="text-align:right">89,383</td>
 <td style="text-align:left">11,340 / 10,029</td>
 <td style="text-align:right">39</td>
 </tr>
+<tr>
+<td style="text-align:left">2026-04-28 (this update)</td>
+<td style="text-align:left">this row</td>
+<td style="text-align:right">919</td>
+<td style="text-align:right">292,389</td>
+<td style="text-align:right">92,225</td>
+<td style="text-align:left">9,992 / 10,761</td>
+<td style="text-align:right">43</td>
+</tr>
 </tbody></table>
 <p>The growth between 2026-04-18 and 2026-04-24 — roughly 100 files, ~18,000 lines, ~8,000 audit rows, ~6,500 brain-graph nodes — is one week of ordinary development plus the autonomous loops that continue to add brain-graph state regardless of whether anyone is reading the papers. The brain-graph delta is the largest relative change (≈2.4×) because the reasoning and hypothesis daemons run on their own schedule.</p>
-<p>The trilogy's stat block at 2026-04-18 is preserved as a dated snapshot. Paper 4's stat block at 2026-04-22 is preserved similarly. This companion's snapshot is the current state at publication. None of the papers' arguments depends on which snapshot the reader is looking at; the ratios that Paper 4 derives (scaffolding-to-decision ≈ 9:1 by LOC and ≈ 14:1 by audit events) are stable across the three snapshots.</p>
+<p>The 2026-04-28 row extends the table by one further interval. Files and LOC grew at roughly 33 files/day and ~10,500 lines/day over the four-day window — an acceleration over the prior week's rate, consistent with a high-activity development period. Audit rows continued at the established ~700/day pace. Brain-graph <strong>nodes decreased</strong> for the first time in the table (11,340 → 9,992): an auto-decay layer was shipped 2026-04-27 to prune low-confidence nodes after a paranoid-hypothesis pollution incident, and the new lower count reflects that pruning rather than a regression. Edge count continued to grow over the same interval (10,029 → 10,761).</p>
+<p>The trilogy's stat block at 2026-04-18 is preserved as a dated snapshot. Paper 4's stat block at 2026-04-22 is preserved similarly. This companion's snapshot at 2026-04-28 is the current state at this update. None of the papers' arguments depends on which snapshot the reader is looking at; the ratios that Paper 4 derives (scaffolding-to-decision ≈ 9:1 by LOC and ≈ 14:1 by audit events) are stable across the four snapshots.</p>
 <h3 id="13-campfire-fallback-script-count">1.3 Campfire fallback script count</h3>
 <p>The engineering substrate audit (TECHNICAL_DEPTH_2026-04-22.md §7) verified <strong>20 fallback campfire scripts</strong> at the <a href="consciousness/conversation_mode.py"><code>consciousness/conversation_mode.py:1497</code></a> call site on 2026-04-22. The system's own self-audit (mind_audit.md, written 2026-04-25) reads <strong>48 scripts</strong> at the same location. The library appears to have grown between the two audits. The next companion update should re-count and reconcile.</p>
 <hr>
